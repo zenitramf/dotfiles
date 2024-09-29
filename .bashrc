@@ -115,17 +115,17 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export PATH="/home/swimlane/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 . "$HOME/.cargo/env"
 
 eval "$(starship init bash)"
 
 # pnpm
-export PNPM_HOME="/home/swimlane/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
 
-PATH=~/.console-ninja/.bin:$PATH
+PATH=$HOME/.console-ninja/.bin:$PATH
