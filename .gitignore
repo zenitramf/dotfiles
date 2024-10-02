@@ -1,2 +1,4 @@
 .config/tmux/plugins/
 **/lazy-lock.json
+astro/
+go/
