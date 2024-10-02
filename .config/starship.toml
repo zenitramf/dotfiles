@@ -37,3 +37,6 @@ disabled = false
 
 [gcloud]
 disabled = true
+
+[jobs]
+disabled = true
