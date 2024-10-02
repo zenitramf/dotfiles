@@ -11,10 +11,12 @@ disabled = true
 disabled = true
 
 [hostname]
-disabled = true
+disabled = false
+format = ":[$hostname]($style) "
 
 [aws]
 disabled = true
 
 [docker_context]
 disabled = true
+
