@@ -124,3 +124,4 @@ esac
 # pnpm end
 
 PATH=$HOME/.console-ninja/.bin:$PATH
+eval "$(zoxide init bash)"
