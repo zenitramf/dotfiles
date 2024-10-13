@@ -3,4 +3,4 @@
 astro/
 go/
 .config/systemd/
-./config/httpie/
+.config/httpie/
