@@ -1,4 +1,3 @@
-
 -- Customize Mason plugins
 
 ---@type LazySpec
@@ -10,9 +9,11 @@ return {
     opts = {
       ensure_installed = {
         "lua_ls",
+        "basedpyright",
+        "astro",
         "ts_ls",
         "tailwindcss",
-        "pyright"
+        "cssls",
         -- add more arguments for adding more language servers
       },
     },
