@@ -4,3 +4,5 @@ astro/
 go/
 .config/systemd/
 .config/httpie/
+.config/mimeapps.list
+.config/freerdp/known_hosts2
