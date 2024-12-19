@@ -1,3 +1,8 @@
+# Automatically start or attach to a tmux session
+if [ -z "$TMUX" ]; then
+    tmux attach-session -t default || tmux new-session -s default
+fi
+
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
     eval "$(dbus-launch --sh-syntax)"
 fi
