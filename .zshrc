@@ -1,3 +1,5 @@
+setopt NO_BEEP
+
 # Automatically start or attach to a tmux session
 if [ -z "$TMUX" ]; then
     tmux attach-session -t default || tmux new-session -s default
@@ -136,6 +138,9 @@ export OPENAI_KEY=
 export PATH=$PATH:/usr/local/bin
 export PATH="/snap/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+
+# --- Yazi Setup --- #
+export EDITOR="nvim"
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like

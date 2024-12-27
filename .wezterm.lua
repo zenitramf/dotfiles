@@ -22,8 +22,20 @@ config.color_scheme = "Gruvbox Dark (Gogh)"
 
 config.default_domain = "WSL:Cyberleaf"
 
+config.ssh_domains = {
+	{
+		name = "cyberleaf",
+		remote_address = "127.0.0.1",
+		username = "swimlane",
+		-- connect_automatically = true,
+	},
+}
+
+config.default_domain = "cyberleaf"
+
 config.window_close_confirmation = "NeverPrompt"
 config.enable_tab_bar = false
+-- config.term = "wezterm"
 
 -- and finally, return the configuration to wezterm
 return config
