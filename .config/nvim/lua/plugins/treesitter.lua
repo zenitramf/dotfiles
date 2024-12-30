@@ -15,7 +15,7 @@ return {
       "bash",
       "astro",
       "dockerfile",
-
+      "http",
       -- add more arguments for adding more treesitter parsers
     },
   },
