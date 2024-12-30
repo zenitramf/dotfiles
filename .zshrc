@@ -150,10 +150,7 @@ export EDITOR="nvim"
 if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
 fi
-
-export PATH="$HOME/.local/bin:$PATH"
-. "$HOME/.cargo/env"
-
+ 
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
