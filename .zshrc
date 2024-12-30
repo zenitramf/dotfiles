@@ -151,6 +151,10 @@ if [ -f ~/.bash_aliases ]; then
   . ~/.bash_aliases
 fi
 
+# if [ -f ~/.wttr-alias ]; then
+#   . ~/.wttr-alias
+# fi
+
 export PATH="$HOME/.local/bin:$PATH"
 . "$HOME/.cargo/env"
 
