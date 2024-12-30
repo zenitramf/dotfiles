@@ -1,11 +1,11 @@
 command_timeout = 2000
 
 [line_break]
-disabled = true
+disabled = false
 
 [hostname]
 ssh_only = false
-format =  "[$hostname](bold red) "
+format =  "[$hostname]"
 disabled = true
 
 [aws]
@@ -13,6 +13,9 @@ format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
 
 [bun]
 format = '\[[$symbol($version)]($style)\]'
+
+[container]
+disabled = true
 
 [c]
 format = '\[[$symbol($version(-$name))]($style)\]'
@@ -190,7 +193,7 @@ format = '\[[$symbol$workspace]($style)\]'
 format = '\[[$time]($style)\]'
 
 [username]
-format = '\[[$user]($style)\] '
+format = '\[[󰣇 $user]($style)\] '
 style_user = 'blue bold'
 style_root = 'black bold'
 show_always = true
