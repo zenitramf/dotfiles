@@ -14,6 +14,7 @@ return {
         "ts_ls",
         "tailwindcss",
         "cssls",
+        "marksman",
         -- "htmx",
         -- add more arguments for adding more language servers
       },

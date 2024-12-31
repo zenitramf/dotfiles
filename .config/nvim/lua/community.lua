@@ -13,4 +13,5 @@ return {
   { import = "astrocommunity.fuzzy-finder.telescope-zoxide" },
   { import = "astrocommunity.code-runner.executor-nvim" },
   -- { import = "astrocommunity.programming-language-support.rest-nvim" },
+  -- { import = "astrocommunity.note-taking.obsidian-nvim" },
 }

@@ -16,6 +16,11 @@ return {
       "astro",
       "dockerfile",
       "http",
+      "javascript",
+      "markdown",
+      "markdown_inline",
+      "jsdoc",
+      "comment",
       -- add more arguments for adding more treesitter parsers
     },
   },
