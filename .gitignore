@@ -6,3 +6,4 @@ go/
 .config/httpie/
 .config/mimeapps.list
 .config/freerdp/known_hosts2
+.config/wslu/triggered_time
