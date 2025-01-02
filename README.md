@@ -44,6 +44,10 @@ curl -o ~/bin/wsl-open https://raw.githubusercontent.com/4U6U57/wsl-open/master/
 
 ```
 
+[eza](https://github.com/eza-community/eza/blob/main/INSTALL.md)
+`cargo install eza`
+Need Rust and Cargo Installed
+
 ## Install Using pacman
 
 List of apps to install using pacman.
