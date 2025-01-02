@@ -13,7 +13,7 @@ return {
     workspaces = {
       {
         name = "Personal",
-        path = "~/zenitram/zendocs",
+        path = "/mnt/c/Users/marti/Obsidian/ZenitramF_Personal",
       },
       {
         name = "Work",
