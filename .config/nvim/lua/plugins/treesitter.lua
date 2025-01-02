@@ -21,6 +21,7 @@ return {
       "markdown_inline",
       "jsdoc",
       "comment",
+      "yaml",
       -- add more arguments for adding more treesitter parsers
     },
   },
