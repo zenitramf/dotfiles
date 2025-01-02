@@ -20,18 +20,18 @@ config.color_scheme = "Gruvbox Dark (Gogh)"
 
 -- config.default_prog = { "wsl", "-d", "Cyberleaf", "--cd", "~" }
 
-config.default_domain = "WSL:Cyberleaf"
+config.default_domain = "WSL:Arch"
 
-config.ssh_domains = {
-	{
-		name = "cyberleaf",
-		remote_address = "127.0.0.1",
-		username = "swimlane",
-		-- connect_automatically = true,
-	},
-}
+-- config.ssh_domains = {
+-- 	{
+-- 		name = "cyberleaf",
+-- 		remote_address = "127.0.0.1",
+-- 		username = "swimlane",
+-- 		connect_automatically = false,
+-- 	},
+-- }
 
-config.default_domain = "cyberleaf"
+-- config.default_domain = "cyberleaf"
 
 config.window_close_confirmation = "NeverPrompt"
 config.enable_tab_bar = false
