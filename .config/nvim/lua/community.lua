@@ -14,5 +14,8 @@ return {
   { import = "astrocommunity.code-runner.executor-nvim" },
   { import = "astrocommunity.motion.mini-move" },
   -- { import = "astrocommunity.programming-language-support.rest-nvim" },
-  -- { import = "astrocommunity.note-taking.obsidian-nvim" },
+  -- { import = "astrocommunity.colorscheme.catppuccin" },
+  { import = "astrocommunity.colorscheme.tokyonight-nvim" },
+  { import = "astrocommunity.file-explorer.oil-nvim" },
+  { import = "astrocommunity.motion.flash-nvim" },
 }

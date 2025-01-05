@@ -4,6 +4,8 @@ return {
   "mistweaverco/kulala.nvim",
   ft = "http",
   opts = {
+    display_mode = "float",
+    split_direction = "horizontal",
     default_winbar_panes = { "body", "headers", "headers_body", "script_output" },
     winbar = true,
   },
@@ -36,7 +38,7 @@ return {
         }
         maps.n[prefix .. "S"] = {
           "<cmd>lua require('kulala').scratchpad()<CR>",
-          desc = "Execute All Requests Under Cursor",
+          desc = "Scratchpad",
         }
         maps.n[prefix .. "c"] = {
           "<cmd>lua require('kulala').copy()<CR>",

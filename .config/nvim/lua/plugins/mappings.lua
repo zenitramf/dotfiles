@@ -1,41 +1,21 @@
 local mapping_array = {}
 
 ---@type LazySpec
-local executor = {
+local generic = {
   n = {
-    ["<Leader>E"] = { desc = "Code Executor" },
-    ["<Leader>Er"] = {
-      "<cmd>ExecutorRun <CR>",
-      desc = "Run code.",
+    ["<S-Tab>"] = {
+      "<cmd>bprev<CR>",
+      desc = "Previous Buffer",
     },
-    ["<Leader>Ed"] = {
-      "<cmd>ExecutorShowDetail <CR>",
-      desc = "Run code show results.",
-    },
-    ["<Leader>Es"] = {
-      "<cmd>ExecutorSwapToSplit<CR>",
-      desc = "Swap to Split Type",
-    },
-    ["<Leader>Ep"] = {
-      "<cmd>ExecutorSwapToPopup<CR>",
-      desc = "Swap to Popup Type",
-    },
-  },
-}
-
----@type LazySpec
-local oil = {
-  n = {
-    ["<Leader>O"] = {
-      "<cmd> Oil <CR>",
-      desc = "Launch Oil.",
+    ["<Tab>"] = {
+      "<cmd>bnext<CR>",
+      desc = "Next Buffer",
     },
   },
 }
 
 ---@type AstroCoreOpts
-table.insert(mapping_array, executor)
-table.insert(mapping_array, oil)
+table.insert(mapping_array, generic)
 
 ---@type LazySpec
 local mappings = {}

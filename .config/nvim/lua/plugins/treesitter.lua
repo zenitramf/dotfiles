@@ -22,6 +22,9 @@ return {
       "jsdoc",
       "comment",
       "yaml",
+      "typescript",
+      "toml",
+      "tsx",
       -- add more arguments for adding more treesitter parsers
     },
   },

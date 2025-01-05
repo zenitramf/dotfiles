@@ -1,6 +1,14 @@
 -- if true then return {} end
 local prefix = "<Leader>v"
 
+local keyMap = function(vault, command)
+  vim.cmd("ObsidianWorkspace " .. vault)
+  vim.cmd(command)
+end
+
+local work = "Work"
+local personal = "Personal"
+
 return {
   "epwalsh/obsidian.nvim",
   event = "VeryLazy",
@@ -76,7 +84,7 @@ return {
           desc = "Picker List of All Tag Occurences",
         }
         maps.n[prefix .. "y"] = {
-          "<cmd>ObsidianWorkspace Personal<CR> | <cmd>ObsidianToday<CR>",
+          function() keyMap(personal, "ObsidianToday") end,
           desc = "Open the Daily Note in the Personal Vault",
         }
         maps.n[prefix .. "r"] = {
@@ -88,7 +96,7 @@ return {
           desc = "Paste Image from the Clipboard",
         }
         maps.n[prefix .. "pd"] = {
-          "<cmd>ObsidianWorkspace Personal<CR> | <cmd>ObsidianDailies<CR>",
+          function() keyMap(personal, "ObsidianDailies") end,
           desc = "Open Dailies from Personal Vault",
         }
         maps.n[prefix .. "w"] = {
@@ -96,15 +104,15 @@ return {
           desc = require("astroui").get_icon("Work", 1, true) .. "Work Notes",
         }
         maps.n[prefix .. "ws"] = {
-          "<cmd>ObsidianWorkspace Work<CR> | <cmd>ObsidianSearch<CR>",
+          function() keyMap(work, "ObsidianSearch") end,
           desc = "Grep Search Work",
         }
         maps.n[prefix .. "wn"] = {
-          "<cmd>ObsidianWorkspace Work<CR> | <cmd>ObsidianNew<CR>",
+          function() keyMap(work, "ObsidianNew") end,
           desc = "New Work Note",
         }
         maps.n[prefix .. "wN"] = {
-          "<cmd>ObsidianWorkspace Work<CR>|<cmd>ObsidianNewFromTemplate<CR>",
+          function() keyMap(work, "ObsidianNewFromTemplate") end,
           desc = "New Work Note from Template",
         }
         maps.n[prefix .. "p"] = {
@@ -112,23 +120,23 @@ return {
           desc = require("astroui").get_icon("Personal", 1, true) .. "Personal Notes",
         }
         maps.n[prefix .. "ps"] = {
-          "<cmd>ObsidianWorkspace Personal<CR> | <cmd>ObsidianSearch<CR>",
+          function() keyMap(personal, "ObsidianSearch") end,
           desc = "Grep Search Personal",
         }
         maps.n[prefix .. "pn"] = {
-          "<cmd>ObsidianWorkspace Personal<CR> | <cmd>ObsidianNew<CR>",
+          function() keyMap(personal, "ObsidianNew") end,
           desc = "New Personal Note",
         }
         maps.n[prefix .. "pN"] = {
-          "<cmd>ObsidianWorkspace Personal<CR>|<cmd>ObsidianNewFromTemplate<CR>",
+          function() keyMap(personal, "ObsidianNewFromTemplate") end,
           desc = "New Personal Note from Template",
         }
         maps.n[prefix .. "wq"] = {
-          "<cmd>ObsidianWorkspace Work<CR> | <cmd>ObsidianQuickSwitch<CR>",
+          function() keyMap(work, "ObsidianQuickSwitch") end,
           desc = "Quick Switch Work Notes",
         }
         maps.n[prefix .. "pq"] = {
-          "<cmd>ObsidianWorkspace Personal<CR> | <cmd>ObsidianQuickSwitch<CR>",
+          function() keyMap(personal, "ObsidianQuickSwitch") end,
           desc = "Quick Switch Personal Notes",
         }
       end,
