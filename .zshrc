@@ -5,6 +5,13 @@ if [ -z "$TMUX" ]; then
     tmux attach-session -t default || tmux new-session -s default
 fi
 
+# Automatically start or attach to Zellij session
+# if [[ -z $ZELLIJ && $- == *i* ]]; then
+#   zellij attach --create default
+# fi
+
+# echo 'eval "$(zellij setup --generate-auto-start zsh)"' >> ~/.zshrc
+
 if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
     eval "$(dbus-launch --sh-syntax)"
 fi
@@ -12,6 +19,8 @@ fi
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 export PATH=$HOME/.cargo/bin:$PATH
+
+export PATH=$HOME/go/bin:$PATH
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
