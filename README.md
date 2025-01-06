@@ -86,3 +86,7 @@ yazi 0.4.2-1
 zoxide 0.9.6-1
 zsh 5.9-5
 ```
+
+# WSL Terminal Settings
+
+In case of new PC config, use this [ color setting ](https://github.com/jiyometrik/tokyonight-windows-terminal/blob/master/tokyonight-night.json) for Windows Terminal.
