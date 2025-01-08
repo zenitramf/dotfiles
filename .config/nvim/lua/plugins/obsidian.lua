@@ -25,7 +25,7 @@ return {
       },
       {
         name = "Work",
-        path = "/mnt/c/Users/marti/Obsidian/Cyberleaf-Dev",
+        path = "/mnt/d/iCloudDrive/iCloud~md~obsidian/Cyberleaf_Dev",
       },
     },
     mappings = {
@@ -39,7 +39,8 @@ return {
         opts = { buffer = true, expr = true },
       },
     },
-    preferred_link_style = "markdown",
+    preferred_link_style = "wiki",
+    open_notes_in = "hsplit",
     --- @param url string
     follow_url_func = function(url) vim.ui.open(url) end,
     follow_img_func = function(img)
