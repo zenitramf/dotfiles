@@ -1,0 +1,25 @@
+[[session]]
+name = "tmux conf"
+path = "~/dotfiles/.config/tmux"
+startup_command = "nvim tmux.conf"
+preview_command = "bat --color=always ~/dotfiles/.config/tmux/tmux.conf"
+
+
+[[session]]
+name = "Mini Portal Website"
+path = "~/cyberleaf/cyberleaf_portal"
+preview_command = "bat --color=always ~/cyberleaf/cyberleaf_portal"
+
+
+[[session]]
+name = "Work_Vault"
+path = "/mnt/d/iCloudDrive/iCloud~md~obsidian/Cyberleaf_Dev"
+startup_command = "nvim ."
+preview_command = "lsa  /mnt/d/iCloudDrive/iCloud~md~obsidian/Cyberleaf_Dev"
+
+[[session]]
+name = "Zenitram_Vault"
+path = "/mnt/c/Users/marti/Obsidian/ZenitramF_Personal"
+startup_command = "nvim ."
+preview_command = "lsa  /mnt/c/Users/marti/Obsidian/ZenitramF_Personal"
+
