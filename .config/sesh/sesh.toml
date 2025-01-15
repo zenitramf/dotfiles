@@ -23,3 +23,26 @@ path = "/mnt/c/Users/marti/Obsidian/ZenitramF_Personal"
 startup_command = "nvim ."
 preview_command = "lsa  /mnt/c/Users/marti/Obsidian/ZenitramF_Personal"
 
+[[session]]
+name = "Sesh Config"
+path = "~/dotfiles/.config/sesh"
+startup_command = "nvim ."
+preview_command = "ls ~/dotfiles/.config/sesh/"
+
+[[session]]
+name = "NVIM - NVCHAD CONFIG"
+path = "~/dotfiles/.config/chadnvim"
+startup_command = "export NVIM_APPNAME=chadnvim && nvim ."
+preview_command = "ls ~/dotfiles/.config/chadnvim"
+
+[[session]]
+name = "NVIM - BASE CONFIG"
+path = "~/dotfiles/.config/nvim"
+startup_command = "nvim ."
+preview_command = "ls ~/dotfiles/.config/nvim"
+
+[[session]]
+name = "API CALLS"
+path = "~/cyberleaf/API_CALLS"
+startup_command = "nvim ."
+preview_command = "ls ~/cyberleaf/API_CALLS"
