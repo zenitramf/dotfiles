@@ -146,6 +146,10 @@ function y() {
 	rm -f -- "$tmp"
 }
 
+alias nvchad='NVIM_APPNAME="chadnvim" nvim'
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 eval "$(starship init zsh)"
 export OPENAI_KEY=
 export PATH=$PATH:/usr/local/bin
@@ -193,7 +197,7 @@ _fzf_compgen_dir() {
 }
 
 
-show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
+show_file_or_dir_preview="if [ -d \"{}\" ]; then eza --tree --color=always \"{}\" | head -200; else bat -n --color=always --line-range :500 \"{}\"; fi"
 
 export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
 export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"

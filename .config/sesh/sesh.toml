@@ -4,12 +4,10 @@ path = "~/dotfiles/.config/tmux"
 startup_command = "nvim tmux.conf"
 preview_command = "bat --color=always ~/dotfiles/.config/tmux/tmux.conf"
 
-
 [[session]]
 name = "Mini Portal Website"
 path = "~/cyberleaf/cyberleaf_portal"
 preview_command = "bat --color=always ~/cyberleaf/cyberleaf_portal"
-
 
 [[session]]
 name = "Work_Vault"
@@ -32,7 +30,7 @@ preview_command = "ls ~/dotfiles/.config/sesh/"
 [[session]]
 name = "NVIM - NVCHAD CONFIG"
 path = "~/dotfiles/.config/chadnvim"
-startup_command = "export NVIM_APPNAME=chadnvim && nvim ."
+startup_command = "nvchad ."
 preview_command = "ls ~/dotfiles/.config/chadnvim"
 
 [[session]]
@@ -46,3 +44,21 @@ name = "API CALLS"
 path = "~/cyberleaf/API_CALLS"
 startup_command = "nvim ."
 preview_command = "ls ~/cyberleaf/API_CALLS"
+
+[[session]]
+name = "Supabase Functions"
+path = "~/cyberleaf/supabase_cyberleaf"
+startup_command = "nvchad ."
+preview_command = "ls ~/cyberleaf/supabase_cyberleaf"
+
+[[session]]
+name = "Keeper API Lambda Functions"
+path = "~/cyberleaf/keeper_ksm_api/"
+startup_command = "nvchad ."
+preview_command = "ls ~/cyberleaf/keeper_ksm_api/"
+
+[[session]]
+name = "Sanity Studio"
+path = "~/cyberleaf/sanity_studio/cyberleaf-mini-portal/"
+startup_command = "nvim ."
+preview_command = "ls ~/cyberleaf/sanity_studio/cyberleaf-mini-portal/"
