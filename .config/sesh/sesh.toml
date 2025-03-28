@@ -16,22 +16,10 @@ startup_command = "nvim ."
 preview_command = "lsa  /mnt/d/iCloudDrive/iCloud~md~obsidian/Cyberleaf_Dev"
 
 [[session]]
-name = "Zenitram_Vault"
-path = "/mnt/c/Users/marti/Obsidian/ZenitramF_Personal"
-startup_command = "nvim ."
-preview_command = "lsa  /mnt/c/Users/marti/Obsidian/ZenitramF_Personal"
-
-[[session]]
 name = "Sesh Config"
 path = "~/dotfiles/.config/sesh"
 startup_command = "nvim ."
 preview_command = "ls ~/dotfiles/.config/sesh/"
-
-[[session]]
-name = "NVIM - NVCHAD CONFIG"
-path = "~/dotfiles/.config/chadnvim"
-startup_command = "nvchad ."
-preview_command = "ls ~/dotfiles/.config/chadnvim"
 
 [[session]]
 name = "NVIM - BASE CONFIG"
@@ -40,25 +28,21 @@ startup_command = "nvim ."
 preview_command = "ls ~/dotfiles/.config/nvim"
 
 [[session]]
-name = "API CALLS"
-path = "~/cyberleaf/API_CALLS"
-startup_command = "nvim ."
-preview_command = "ls ~/cyberleaf/API_CALLS"
-
-[[session]]
 name = "Supabase Functions"
 path = "~/cyberleaf/supabase_cyberleaf"
 startup_command = "nvchad ."
 preview_command = "ls ~/cyberleaf/supabase_cyberleaf"
 
 [[session]]
-name = "Keeper API Lambda Functions"
-path = "~/cyberleaf/keeper_ksm_api/"
-startup_command = "nvchad ."
-preview_command = "ls ~/cyberleaf/keeper_ksm_api/"
-
-[[session]]
 name = "Sanity Studio"
 path = "~/cyberleaf/sanity_studio/cyberleaf-mini-portal/"
 startup_command = "nvim ."
 preview_command = "ls ~/cyberleaf/sanity_studio/cyberleaf-mini-portal/"
+
+[[session]]
+name = "FresnoVictory - 11ty"
+startup_command = "tmuxinator start fresnovictory_11ty && tmux kill-session"
+
+[[session]]
+name = "Mini Portal"
+startup_command = "tmuxinator start mini_portal && tmux kill-session"

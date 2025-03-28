@@ -1,3 +1,4 @@
+local prefix = "<Leader>"
 ---@type LazySpec
 return {
   {
@@ -12,6 +13,17 @@ return {
       view_options = {
         show_hidden = true,
         is_always_hidden = function(name, _) return name == ".." or name == ".git" end,
+      },
+    },
+    specs = {
+      {
+        "AstroNvim/astrocore",
+        opts = function(_, opts)
+          local maps = opts.mappings
+          maps.n[prefix .. "e"] = {
+            "<cmd>Oil --float<CR>",
+          }
+        end,
       },
     },
     -- Optional dependencies

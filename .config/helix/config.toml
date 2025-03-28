@@ -1,4 +1,8 @@
-theme = "carbonfox"
+theme = "nord-night"
+
+[editor]
+true-color = true
+end-of-line-diagnostics = "hint"
 
 [editor.cursor-shape]
 insert = "bar"
@@ -8,5 +12,15 @@ select = "underline"
 [editor.file-picker]
 hidden = false
 
+[editor.inline-diagnostics]
+# Minimum severity to show a diagnostic on the primary cursor's line.
+# Note that `cursor-line` diagnostics are hidden in insert mode.
+cursor-line = "error"
+# Minimum severity to show a diagnostic on other lines:
+# other-lines = "error"
+
 [keys.insert]
 "j"= {"k"="normal_mode"}
+
+[keys.normal]
+space.w = ":w"

@@ -1,5 +1,3 @@
--- Customize Mason plugins
-
 ---@type LazySpec
 return {
   -- use mason-lspconfig to configure LSP installations
@@ -9,9 +7,7 @@ return {
     opts = {
       ensure_installed = {
         "lua_ls",
-        "basedpyright",
         "astro",
-        "ts_ls",
         "tailwindcss",
         "cssls",
         "marksman",
@@ -27,7 +23,6 @@ return {
     opts = {
       ensure_installed = {
         "stylua",
-        "prettier",
         -- add more arguments for adding more null-ls sources
       },
     },
