@@ -41,3 +41,7 @@ startup_command = "tmuxinator start fresnovictory_11ty && tmux kill-session"
 [[session]]
 name = "Mini Portal"
 startup_command = "tmuxinator start mini_portal && tmux kill-session"
+
+[[session]]
+name = "Swimlane Landing Page"
+startup_command = "tmuxinator start swim_landing && tmux kill-session"

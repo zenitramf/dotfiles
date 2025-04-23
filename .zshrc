@@ -104,6 +104,7 @@ plugins=(
   dotenv
   fzf
   eza
+  zsh-nvim-appname
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -146,7 +147,11 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-alias nvchad='NVIM_APPNAME="chadnvim" nvim'
+alias nvchad='export NVIM_APPNAME=chadnvim'
+alias lazy='export NVIM_APPNAME=lazynvim'
+alias astro='export NVIM_APPNAME=nvim'
+
+alias vfzf='nvim $(fzf --preview="bat --color=always {}")'
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
@@ -231,3 +236,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 eval "$(zoxide init --cmd cd zsh)"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/swimlane/google-cloud-sdk/path.zsh.inc' ]; then . '/home/swimlane/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/swimlane/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/swimlane/google-cloud-sdk/completion.zsh.inc'; fi

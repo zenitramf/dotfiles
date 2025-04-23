@@ -1,5 +1,5 @@
 # [Created by task 3.4.1 3/28/2025 17:31:41]
-data.location=/home/swimlane/.task
+data.location= /home/swimlane/.task
 news.version=3.4.1
 
 # To use the default location of the XDG directories,
@@ -25,3 +25,5 @@ news.version=3.4.1
 #include solarized-light-256.theme
 #include no-color.theme
 
+sync.gcp.bucket=taskwarrior_tasks
+sync.encryption_secret=i@5vtLKz3zMM3dOd
