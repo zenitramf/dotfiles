@@ -16,7 +16,7 @@ return {
   -- { import = "astrocommunity.programming-language-support.rest-nvim" },
   { import = "astrocommunity.file-explorer.oil-nvim" },
   { import = "astrocommunity.motion.flash-nvim" },
-  { import = "astrocommunity.indent.indent-blankline-nvim" },
+  -- { import = "astrocommunity.indent.indent-blankline-nvim" },
   { import = "astrocommunity.indent.mini-indentscope" },
   -- { import = "astrocommunity.motion.hop-nvim" },
   { import = "astrocommunity.remote-development.distant-nvim" },

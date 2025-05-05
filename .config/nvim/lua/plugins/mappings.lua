@@ -1,3 +1,4 @@
+local prefix = "<Leader>v"
 local mapping_array = {}
 
 ---@type LazySpec
@@ -10,6 +11,13 @@ local generic = {
     ["<Tab>"] = {
       "<cmd>bnext<CR>",
       desc = "Next Buffer",
+    },
+    [prefix .. "a"] = {
+      function()
+        local keys = vim.api.nvim_replace_termcodes("ggVGy<C-o>", true, false, true)
+        vim.api.nvim_feedkeys(keys, "n", true)
+      end,
+      desc = "Select whole file and yank.",
     },
   },
 }
@@ -31,7 +39,19 @@ end
 
 return {
   "AstroNvim/astrocore",
-  opts = {
-    mappings = mappings,
-  },
+  opts = function(_, opts)
+    local maps = opts.mappings
+    maps.o["aE"] = {
+      function() vim.cmd "normal! ggVGy" end,
+      desc = "Select whole file and yank.",
+    }
+    maps.n["<S-Tab>"] = {
+      "<cmd>bprev<CR>",
+      desc = "Previous Buffer",
+    }
+    maps.n["<Tab>"] = {
+      "<cmd>bnext<CR>",
+      desc = "Next Buffer",
+    }
+  end,
 }
