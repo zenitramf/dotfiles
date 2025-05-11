@@ -25,11 +25,11 @@ return {
           "<cmd>ExecutorRun<CR>",
           desc = require("astroui").get_icon("Executor", 1, true) .. "Run Code",
         }
-        maps.n[prefix .. "d"] = {
+        maps.n[prefix .. "s"] = {
           "<cmd>ExecutorShowDetail<CR>",
           desc = "Show Results",
         }
-        maps.n[prefix .. "s"] = {
+        maps.n[prefix .. "d"] = {
           "<cmd>ExecutorSwapToSplit<CR>",
           desc = "Swap to Split Type",
         }

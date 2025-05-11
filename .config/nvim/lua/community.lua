@@ -22,9 +22,13 @@ return {
   { import = "astrocommunity.remote-development.distant-nvim" },
   { import = "astrocommunity.motion.mini-ai" },
   { import = "astrocommunity.pack.typescript-all-in-one" },
+  { import = "astrocommunity.pack.php" },
   -- { import = "astrocommunity.completion.copilot-lua-cmp" },
   -- { import = "astrocommunity.completion.copilot-cmp" },
+  { import = "astrocommunity.colorscheme.catppuccin" },
+  { import = "astrocommunity.colorscheme.rose-pine" },
   { import = "astrocommunity.pack.python-ruff" },
   { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
   { import = "astrocommunity.pack.svelte" },
+  { import = "astrocommunity.pack.terraform" },
 }

@@ -1,4 +1,4 @@
--- if true then return {} end
+if true then return {} end
 local prefix = "<Leader>v"
 
 local keyMap = function(vault, command)

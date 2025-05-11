@@ -14,3 +14,8 @@ preview_command = "ls ~/dotfiles/.config/sesh/"
 name = "tmuxinator config"
 path = "~/dotfiles/.config/tmuxinator/"
 startup_command = "nvim ."
+
+[[session]]
+name = "zshconfig"
+path = "~/dotfiles/"
+startup_command = "nvim .zshrc"

@@ -147,6 +147,26 @@ function y() {
 	rm -f -- "$tmp"
 }
 
+# Load AWS credentials from Keeper Secrets Manager (KSM)
+aws_ksm_login() {
+  if ! command -v ksm >/dev/null 2>&1; then
+    echo "❌ Error: 'ksm' command not found. Please install Keeper Secrets Manager CLI first."
+    return 1
+  fi
+
+  if [[ -z "$1" ]]; then
+    echo "Usage: aws_ksm_login <record_uid>"
+    return 1
+  fi
+
+  export AWS_ACCESS_KEY_ID=$(ksm secret get "$1" -f login)
+  export AWS_SECRET_ACCESS_KEY=$(ksm secret get "$1" -f password)
+
+  echo "🔐 AWS credentials loaded into environment from Keeper record UID: $1"
+}
+
+
+alias tf='terraform'
 alias nvchad='export NVIM_APPNAME=chadnvim'
 alias lazy='export NVIM_APPNAME=lazynvim'
 alias astro='export NVIM_APPNAME=nvim'
