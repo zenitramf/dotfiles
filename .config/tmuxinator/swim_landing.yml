@@ -1,7 +1,7 @@
 # /home/swimlane/.config/tmuxinator/swim_landing.yml
 
 name: swim_landing
-root: ~/cyberleaf/swimlane_ticket_landing_page/
+root: ~/git/swimlane_ticket_landing_page/
 
 # Optional tmux socket
 # socket_name: foo
@@ -45,4 +45,5 @@ root: ~/cyberleaf/swimlane_ticket_landing_page/
 # attach: false
 
 windows:
-  - editor: nvim .
+  - editor: vfzf 
+  - server: bun run dev

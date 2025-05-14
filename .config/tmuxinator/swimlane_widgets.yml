@@ -1,4 +1,4 @@
 name: Swimlane Widgets
-root: ~/cyberleaf/Swimlane_Widgets/
+root: ~/git/Swimlane_Widgets/
 windows:
   - editor: vfzf

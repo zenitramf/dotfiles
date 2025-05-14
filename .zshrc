@@ -1,9 +1,12 @@
 setopt NO_BEEP
+export LIBGL_ALWAYS_INDIRECT=1
 
-# Automatically start or attach to a tmux session
 if [ -z "$TMUX" ]; then
     tmux attach-session -t default || tmux new-session -s default
 fi
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 
 # Automatically start or attach to Zellij session
 # if [[ -z $ZELLIJ && $- == *i* ]]; then
@@ -173,7 +176,6 @@ alias astro='export NVIM_APPNAME=nvim'
 
 alias vfzf='nvim $(fzf --preview="bat --color=always {}")'
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 eval "$(starship init zsh)"
 export OPENAI_KEY=
@@ -262,3 +264,4 @@ if [ -f '/home/swimlane/google-cloud-sdk/path.zsh.inc' ]; then . '/home/swimlane
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/swimlane/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/swimlane/google-cloud-sdk/completion.zsh.inc'; fi
+

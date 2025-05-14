@@ -16,26 +16,30 @@ local config = wezterm.config_builder()
 -- This is where you actually apply your config choices
 
 -- For example, changing the color scheme:
-config.color_scheme = "Gruvbox Dark (Gogh)"
+config.color_scheme = "rose-pine"
 
--- config.default_prog = { "wsl", "-d", "Cyberleaf", "--cd", "~" }
-
-config.default_domain = "WSL:Arch"
+config.keys = {
+	{
+		key = "v",
+		mods = "SHIFT|CTRL",
+		action = wezterm.action.PasteFrom("Clipboard"),
+	},
+}
 
 -- config.ssh_domains = {
 -- 	{
--- 		name = "cyberleaf",
+-- 		name = "zenitram",
 -- 		remote_address = "127.0.0.1",
--- 		username = "swimlane",
+-- 		username = "zenitram",
 -- 		connect_automatically = false,
 -- 	},
 -- }
+--
 
--- config.default_domain = "cyberleaf"
+config.default_domain = "SSH:local"
 
 config.window_close_confirmation = "NeverPrompt"
 config.enable_tab_bar = false
--- config.term = "wezterm"
 
 -- and finally, return the configuration to wezterm
 return config
