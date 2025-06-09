@@ -1,9 +1,9 @@
 setopt NO_BEEP
 export LIBGL_ALWAYS_INDIRECT=1
 
-if [ -z "$TMUX" ]; then
-    tmux attach-session -t default || tmux new-session -s default
-fi
+# if [ -z "$TMUX" ]; then
+#     tmux attach-session -t default || tmux new-session -s default
+# fi
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 

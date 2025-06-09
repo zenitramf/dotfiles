@@ -31,4 +31,5 @@ return {
   { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
   { import = "astrocommunity.pack.svelte" },
   { import = "astrocommunity.pack.terraform" },
+  { import = "astrocommunity.color.modes-nvim" },
 }
