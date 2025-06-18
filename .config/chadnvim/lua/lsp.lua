@@ -1,5 +1,7 @@
 vim.lsp.enable {
-  "biome",
   "ruff",
   "pyright",
+  "vtsls",
+  "cssls",
+  "gh_actions_ls",
 }

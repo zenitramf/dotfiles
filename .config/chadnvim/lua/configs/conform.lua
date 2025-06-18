@@ -1,14 +1,14 @@
 local options = {
   formatters_by_ft = {
     lua = { "stylua" },
-    -- css = { "prettier" },
-    -- html = { "prettier" },
-    typescript = { "biome-check" },
-    javascript = { "biome-check" },
-    ["typescript.tsx"] = { "biome-check" },
-    typescriptreact = { "biome-check" },
-    javascriptreact = { "biome-check" },
-    ["javascript.jsx"] = { "biome-check" },
+    css = { "prettierd" },
+    html = { "prettierd" },
+    typescript = { "eslint_d" },
+    javascript = { "eslint_d" },
+    ["typescript.tsx"] = { "eslint_d" },
+    typescriptreact = { "eslint_d" },
+    javascriptreact = { "eslint_d" },
+    ["javascript.jsx"] = { "eslint_d" },
     python = {
       -- To fix auto-fixable lint errors.
       "ruff_fix",

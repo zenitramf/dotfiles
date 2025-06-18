@@ -2,12 +2,12 @@ if vim.fn.has "wsl" == 1 then
   vim.g.clipboard = {
     name = "wsl-clipboard",
     copy = {
-      ["+"] = { "clip.exe" },
-      ["*"] = { "clip.exe" },
+      ["+"] = { "win32yank.exe", "-i", "--crlf" },
+      ["*"] = { "win32yank.exe", "-i", "--crlf" },
     },
     paste = {
-      ["+"] = { "powershell.exe", "-noprofile", "-command", "Get-Clipboard | Out-String | %%{$_ -replace '\\r', ''}" },
-      ["*"] = { "powershell.exe", "-noprofile", "-command", "Get-Clipboard | Out-String | %%{$_ -replace '\\r', ''}" },
+      ["+"] = { "win32yank.exe", "-o", "--lf" },
+      ["*"] = { "win32yank.exe", "-o", "--lf" },
     },
   }
 elseif vim.fn.has "mac" == 1 then

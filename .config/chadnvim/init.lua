@@ -33,6 +33,8 @@ require "options"
 require "autocmds"
 require "lsp"
 require "clip"
+require "macros"
+require "usercmds"
 
 vim.schedule(function()
   require "mappings"

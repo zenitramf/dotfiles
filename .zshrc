@@ -168,16 +168,32 @@ aws_ksm_login() {
   echo "🔐 AWS credentials loaded into environment from Keeper record UID: $1"
 }
 
+function ranger {
+    local IFS=$'\t\n'
+    local tempfile="$(mktemp -t tmp.XXXXXX)"
+    local ranger_cmd=(
+        command
+        ranger
+        --cmd="map Q chain shell echo %d > "$tempfile"; quitall"
+    )
+    
+    ${ranger_cmd[@]} "$@"
+    if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]]; then
+        cd -- "$(cat "$tempfile")" || return
+    fi
+    command rm -f -- "$tempfile" 2>/dev/null
+}
 
 alias tf='terraform'
 alias nvchad='export NVIM_APPNAME=chadnvim'
 alias lazy='export NVIM_APPNAME=lazynvim'
-alias astro='export NVIM_APPNAME=nvim'
+alias nvim_default='export NVIM_APPNAME=nvim'
 
 alias vfzf='nvim $(fzf --preview="bat --color=always {}")'
 
 
 eval "$(starship init zsh)"
+export NVIM_APPNAME=chadnvim
 export OPENAI_KEY=
 export PATH=$PATH:/usr/local/bin
 export PATH="/snap/bin:$PATH"
@@ -247,7 +263,7 @@ _fzf_comprun() {
 
 # ---- Eza (better ls) -----
 
-alias ls="eza --icons=always"
+alias ls="eza --icons=always -1"
 
 # Cargo
 export PATH=/usr/local/bin:/usr/bin:/bin:$PATH
