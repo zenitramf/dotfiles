@@ -168,20 +168,35 @@ aws_ksm_login() {
   echo "🔐 AWS credentials loaded into environment from Keeper record UID: $1"
 }
 
-function ranger {
+ranger() {
     local IFS=$'\t\n'
-    local tempfile="$(mktemp -t tmp.XXXXXX)"
+    local tempfile
+    tempfile="$(mktemp -t tmp.XXXXXX)"
+
     local ranger_cmd=(
-        command
-        ranger
-        --cmd="map Q chain shell echo %d > "$tempfile"; quitall"
+        command ranger
+        --cmd="map Q chain shell echo %d > \"$tempfile\"; quitall"
     )
-    
-    ${ranger_cmd[@]} "$@"
-    if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]]; then
-        cd -- "$(cat "$tempfile")" || return
+
+    "${ranger_cmd[@]}" "$@"
+
+    if [[ -f "$tempfile" ]]; then
+        local newdir
+        newdir="$(<"$tempfile")"
+        if [[ "$newdir" != "$(pwd)" ]]; then
+            cd -- "$newdir" || return
+        fi
     fi
-    command rm -f -- "$tempfile" 2>/dev/null
+
+    rm -f -- "$tempfile" 2>/dev/null
+}
+
+xdg-open() {
+  if [[ "$1" =~ ^https?:// ]]; then
+    explorer.exe "$1"
+  else
+    explorer.exe "$(wslpath -w "$1")"
+  fi
 }
 
 alias tf='terraform'
