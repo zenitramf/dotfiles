@@ -54,6 +54,10 @@ map({ "n" }, "<leader>sr", function()
   }
 end, { desc = "Search and Replace" })
 
+map({ "n" }, "grr", function()
+  Snacks.picker.lsp_references()
+end, { desc = "Find References" })
+
 local unmap = vim.keymap.del
 
 unmap("n", "<leader>wk")

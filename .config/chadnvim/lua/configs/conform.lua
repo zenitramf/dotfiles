@@ -3,12 +3,13 @@ local options = {
     lua = { "stylua" },
     css = { "prettierd" },
     html = { "prettierd" },
-    typescript = { "eslint_d" },
-    javascript = { "eslint_d" },
-    ["typescript.tsx"] = { "eslint_d" },
-    typescriptreact = { "eslint_d" },
-    javascriptreact = { "eslint_d" },
-    ["javascript.jsx"] = { "eslint_d" },
+    typescript = { "prettierd" },
+    javascript = { "prettierd" },
+    json = { "prettierd" },
+    ["typescript.tsx"] = { "prettierd" },
+    typescriptreact = { "prettierd" },
+    javascriptreact = { "prettierd" },
+    ["javascript.jsx"] = { "prettierd" },
     python = {
       -- To fix auto-fixable lint errors.
       "ruff_fix",
@@ -17,6 +18,7 @@ local options = {
       -- To organize the imports.
       "ruff_organize_imports",
     },
+    markdown = { "prettierd" },
   },
   formatters = {
     ruff = {

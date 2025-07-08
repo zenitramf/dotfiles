@@ -24,3 +24,14 @@ vim.api.nvim_create_autocmd("BufDelete", {
     end
   end,
 })
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function()
+    vim.diagnostic.config {
+      virtual_text = {
+        current_line = true,
+        hl_mode = "combine",
+      },
+    }
+  end,
+})
