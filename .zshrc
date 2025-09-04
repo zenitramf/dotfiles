@@ -107,7 +107,6 @@ plugins=(
   dotenv
   fzf
   eza
-  zsh-nvim-appname
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -208,7 +207,7 @@ alias vfzf='nvim $(fzf --preview="bat --color=always {}")'
 
 
 eval "$(starship init zsh)"
-export NVIM_APPNAME=chadnvim
+export NVIM_APPNAME=
 export OPENAI_KEY=
 export PATH=$PATH:/usr/local/bin
 export PATH="/snap/bin:$PATH"
