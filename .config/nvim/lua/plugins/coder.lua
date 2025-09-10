@@ -4,6 +4,12 @@ return {
   config = true,
   opts = {
     terminal_cmd = "/home/zenitram/.local/bin/claude", -- Use output from 'which claude'
+    terminal = {
+      provider = "external",
+      provider_opts = {
+        external_terminal_cmd = "tmux split-window -h %s",
+      },
+    },
   },
   keys = {
     { "<leader>a", nil, desc = "AI/Claude Code" },
