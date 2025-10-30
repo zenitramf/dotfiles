@@ -6,9 +6,14 @@ return {
     priority = 1000,
   },
   {
+    "rebelot/kanagawa.nvim",
+    lazy = false,
+    priority = 1000,
+  },
+  {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "moonfly",
+      colorscheme = "kanagawa-dragon",
     },
   },
 }
