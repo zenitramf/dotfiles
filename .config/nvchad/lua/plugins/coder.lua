@@ -1,16 +1,8 @@
-return {
+---@type NvPluginSpec
+local spec = {
   "coder/claudecode.nvim",
   dependencies = { "folke/snacks.nvim" },
   config = true,
-  opts = {
-    terminal_cmd = "/home/zenitram/.local/bin/claude", -- Use output from 'which claude'
-    terminal = {
-      provider = "external",
-      provider_opts = {
-        external_terminal_cmd = "tmux split-window -h -p 33 %s",
-      },
-    },
-  },
   keys = {
     { "<leader>a", nil, desc = "AI/Claude Code" },
     { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
@@ -24,10 +16,12 @@ return {
       "<leader>as",
       "<cmd>ClaudeCodeTreeAdd<cr>",
       desc = "Add file",
-      ft = { "NvimTree", "neo-tree", "oil", "minifiles" },
+      ft = { "NvimTree", "neo-tree", "oil", "minifiles", "netrw" },
     },
     -- Diff management
     { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
     { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
   },
 }
+
+return spec
