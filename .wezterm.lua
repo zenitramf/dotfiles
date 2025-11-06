@@ -16,7 +16,7 @@ local config = wezterm.config_builder()
 -- This is where you actually apply your config choices
 
 -- For example, changing the color scheme:
-config.color_scheme = "rose-pine"
+config.color_scheme = "GitHub Dark"
 
 config.keys = {
 	{
@@ -36,10 +36,17 @@ config.keys = {
 -- }
 --
 
-config.default_domain = "SSH:local"
+-- config.default_domain = "SSH:local"
+--
+config.default_domain = "WSL:Zenitram-Dev"
 
 config.window_close_confirmation = "NeverPrompt"
 config.enable_tab_bar = false
+
+config.font = wezterm.font_with_fallback({
+	"FiraCode Nerd Font",
+	"Consolas",
+})
 
 -- and finally, return the configuration to wezterm
 return config
