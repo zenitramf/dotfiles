@@ -33,6 +33,71 @@ map('n', 'zK', function()
   end
 end, { desc = 'Peek Fold' })
 
--- Use this for removing keymaps
--- local removeMap = vim.keymap.del
--- Remove default Tab and Shift-Tab mappings in normal mode
+-- Atone Undo Toggle
+map('n', '<leader>u', '<cmd> Atone toggle <cr>', { desc = 'Atone Undo Toggle' })
+
+local Snacks = require 'snacks'
+-- Snacks Pickers
+map('n', '<leader>sh', function()
+  Snacks.picker.help()
+end, { desc = 'Help Search' })
+
+map('n', '<leader>sk', function()
+  Snacks.picker.keymaps()
+end, { desc = 'Keymaps Search' })
+
+map('n', '<leader>sf', function()
+  Snacks.picker.files()
+end, { desc = 'Files Search' })
+
+map('n', '<leader>ss', function()
+  Snacks.picker()
+end, { desc = 'Snacks Main Picker' })
+
+map('n', '<leader>sw', function()
+  Snacks.picker.grep_word()
+end, { desc = 'Search Current Word' })
+
+map('n', '<leader>/', function()
+  Snacks.picker.grep()
+end, { desc = 'Search Input String' })
+
+map('n', '<leader>sd', function()
+  Snacks.picker.diagnostics()
+end, { desc = 'Diagnostics Search' })
+
+map('n', '<leader>sr', function()
+  Snacks.picker.resume()
+end, { desc = 'Resume Last Picker' })
+
+map('n', '<leader>s.', function()
+  Snacks.picker.recent()
+end, { desc = 'Recent Files Search' })
+
+map('n', '<leader><leader>', function()
+  Snacks.picker.buffers()
+end, { desc = 'Buffers Search' })
+
+map('n', '<leader>sc', function()
+  Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
+end, { desc = 'Snacks Command Search' })
+
+local termOpts = { start_insert = false }
+
+map('n', '<C-t>', function()
+  Snacks.terminal.toggle(null, termOpts)
+end, { desc = 'Terminal' })
+
+map('t', '<C-n>', function()
+  local opts = { start_insert = false }
+  Snacks.terminal.open(null, termOpts)
+end, { desc = 'Terminal' })
+
+map('n', '<leader>tt', function()
+  Snacks.terminal.toggle(null, termOpts)
+end, { desc = 'Terminal' })
+
+-- Snacks Zen
+map('n', '<leader>z', function()
+  Snacks.zen()
+end, { desc = 'Toggle Zen Mode' })
