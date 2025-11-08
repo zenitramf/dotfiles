@@ -42,7 +42,7 @@ local spec = {
         component_separators = '',
       },
       sections = {
-        lualine_a = { { StatusLine_Mode, padding = {} } },
+        lualine_a = { StatusLine_Mode },
         lualine_b = {
           'diff',
           {

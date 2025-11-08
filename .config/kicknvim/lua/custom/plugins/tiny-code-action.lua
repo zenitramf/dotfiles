@@ -12,7 +12,7 @@ local spec = {
   event = 'LspAttach',
   opts = {
     picker = 'telescope',
-    backend = 'difftastic',
+    backend = 'delta',
   },
 }
 return spec

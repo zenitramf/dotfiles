@@ -84,7 +84,7 @@ end, { desc = 'Snacks Command Search' })
 
 local termOpts = { start_insert = false }
 
-map('n', '<C-t>', function()
+map({ 'n', 't' }, '<C-t>', function()
   Snacks.terminal.toggle(null, termOpts)
 end, { desc = 'Terminal' })
 
@@ -101,3 +101,30 @@ end, { desc = 'Terminal' })
 map('n', '<leader>z', function()
   Snacks.zen()
 end, { desc = 'Toggle Zen Mode' })
+
+-- Hover
+map('n', 'K', function()
+  require('hover').open()
+end, { desc = 'Hover' })
+map('n', 'gK', function()
+  require('hover').enter()
+end, { desc = 'hover.nvim (enter)' })
+
+map('n', '<C-p>', function()
+  require('hover').switch 'previous'
+end, { desc = 'hover.nvim (previous source)' })
+
+map('n', '<C-n>', function()
+  require('hover').switch 'next'
+end, { desc = 'hover.nvim (next source)' })
+
+-- Buffer delete
+
+map('n', '<leader>bd', function()
+  Snacks.bufdelete()
+end, { desc = 'Delete Buffer' })
+
+-- Snacks Dashboard
+map('n', '<leader>d', function()
+  Snacks.dashboard()
+end, { desc = 'Open Dashboard' })

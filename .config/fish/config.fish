@@ -9,7 +9,7 @@ alias nvim_default='export NVIM_APPNAME=nvim'
 alias ls="li -1"
 alias lsa="llai"
 
-set -x NVIM_APPNAME nvchad
+set -x NVIM_APPNAME kicknvim
 set -x PATH $PATH:/usr/local/bin
 set -x PATH "/snap/bin:$PATH"
 set -x PATH "$HOME/.local/bin:$PATH"
