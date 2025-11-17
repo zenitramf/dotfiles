@@ -34,54 +34,10 @@ map('n', 'zK', function()
 end, { desc = 'Peek Fold' })
 
 -- Atone Undo Toggle
-map('n', '<leader>u', '<cmd> Atone toggle <cr>', { desc = 'Atone Undo Toggle' })
+map('n', '<leader>uu', '<cmd> Atone toggle <cr>', { desc = 'Atone Undo Toggle' })
 
+-- Snacks Terminal
 local Snacks = require 'snacks'
--- Snacks Pickers
-map('n', '<leader>sh', function()
-  Snacks.picker.help()
-end, { desc = 'Help Search' })
-
-map('n', '<leader>sk', function()
-  Snacks.picker.keymaps()
-end, { desc = 'Keymaps Search' })
-
-map('n', '<leader>sf', function()
-  Snacks.picker.files()
-end, { desc = 'Files Search' })
-
-map('n', '<leader>ss', function()
-  Snacks.picker()
-end, { desc = 'Snacks Main Picker' })
-
-map('n', '<leader>sw', function()
-  Snacks.picker.grep_word()
-end, { desc = 'Search Current Word' })
-
-map('n', '<leader>/', function()
-  Snacks.picker.grep()
-end, { desc = 'Search Input String' })
-
-map('n', '<leader>sd', function()
-  Snacks.picker.diagnostics()
-end, { desc = 'Diagnostics Search' })
-
-map('n', '<leader>sr', function()
-  Snacks.picker.resume()
-end, { desc = 'Resume Last Picker' })
-
-map('n', '<leader>s.', function()
-  Snacks.picker.recent()
-end, { desc = 'Recent Files Search' })
-
-map('n', '<leader><leader>', function()
-  Snacks.picker.buffers()
-end, { desc = 'Buffers Search' })
-
-map('n', '<leader>sc', function()
-  Snacks.picker.files { cwd = vim.fn.stdpath 'config' }
-end, { desc = 'Snacks Command Search' })
-
 local termOpts = { start_insert = false }
 
 map({ 'n', 't' }, '<C-t>', function()
@@ -118,6 +74,15 @@ map('n', '<C-n>', function()
   require('hover').switch 'next'
 end, { desc = 'hover.nvim (next source)' })
 
+-- Snacks Dim
+map('n', '<leader>ud', function()
+  if Snacks.dim.enabled then
+    Snacks.dim.disable()
+    return
+  end
+  Snacks.dim.enable()
+end, { desc = 'Toggle Dim Mode' })
+
 -- Buffer delete
 
 map('n', '<leader>bd', function()
@@ -128,3 +93,6 @@ end, { desc = 'Delete Buffer' })
 map('n', '<leader>d', function()
   Snacks.dashboard()
 end, { desc = 'Open Dashboard' })
+
+-- Select All
+map('n', '<C-a>', 'gg<S-v>G')

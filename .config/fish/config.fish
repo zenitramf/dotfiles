@@ -1,3 +1,6 @@
+set -g fish_greeting ""
+
+
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 starship init fish | source
@@ -8,13 +11,14 @@ alias lazy='export NVIM_APPNAME=lazynvim'
 alias nvim_default='export NVIM_APPNAME=nvim'
 alias ls="li -1"
 alias lsa="llai"
+alias fishconfig="nvim ~/dotfiles/.config/fish/config.fish"
+alias nvimconfig="cd ~/dotfiles/.config/kicknvim/ && nvim ."
+alias zw='sesh connect zenwiki -c "cd ~/git/zenwiki && nvim "'
 
 set -x NVIM_APPNAME kicknvim
 set -x PATH $PATH:/usr/local/bin
 set -x PATH "/snap/bin:$PATH"
 set -x PATH "$HOME/.local/bin:$PATH"
-
-
 
 
 zoxide init --cmd cd fish | source

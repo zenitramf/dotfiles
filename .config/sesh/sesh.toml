@@ -16,6 +16,13 @@ path = "~/dotfiles/.config/tmuxinator/"
 startup_command = "nvim ."
 
 [[session]]
-name = "zshconfig"
-path = "~/dotfiles/"
-startup_command = "nvim .zshrc"
+name = "fish config"
+path = "~/dotfiles/fish/"
+startup_command = "nvim ."
+
+
+[[session]]
+name = "nvim config"
+path = "~/dotfiles/.config/kicknvim/"
+startup_command = "nvim ."
+

@@ -1,6 +1,7 @@
 local spec = {
   'nvim-lualine/lualine.nvim',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
+  enabled = true,
   config = function()
     function StatusLine_Line()
       return vim.fn.line '.' .. '󰉸'
