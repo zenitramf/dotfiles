@@ -6,10 +6,12 @@
 return {
   "AstroNvim/astrocommunity",
   { import = "astrocommunity.pack.lua" },
-  -- import/override with your plugins folder
-  { import = "astrocommunity.lsp.nvim-lint" },
-  { import = "astrocommunity.lsp.nvim-lsp-endhints" },
-  { import = "astrocommunity.lsp.ts-error-translator-nvim" },
-  { import = "astrocommunity.pack.typescript-all-in-one" },
   { import = "astrocommunity.pack.biome" },
+  { import = "astrocommunity.pack.svelte" },
+  { import = "astrocommunity.ai.sidekick-nvim" },
+  { import = "astrocommunity.completion.avante-nvim" },
+  { import = "astrocommunity.file-explorer.oil-nvim" },
+  { import = "astrocommunity.editing-support.conform-nvim" },
+
+  -- import/override with your plugins folder
 }

@@ -17,6 +17,35 @@ vim.lsp.config('ruff', {
   settings = {},
 })
 
+vim.lsp.config('lua_ls', {
+  cmd = { 'lua-language-server' },
+  filetypes = { 'lua' },
+  root_markers = {
+    '.luarc.json',
+    '.luarc.jsonc',
+    '.git',
+  },
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        globals = { 'vim' }, -- fixes "undefined global 'vim'"
+      },
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+        },
+      },
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+})
+
 -- Configure vtsls
 vim.lsp.config('vtsls', {
   cmd = { 'vtsls', '--stdio' },
@@ -54,6 +83,45 @@ vim.lsp.config('vtsls', {
   end,
 })
 
+-- Configure TSGO
+vim.lsp.config('tsgo', {
+  cmd = function(dispatchers, config)
+    local cmd = 'tsgo'
+    local local_cmd = (config or {}).root_dir and config.root_dir .. '/node_modules/.bin/tsgo'
+    if local_cmd and vim.fn.executable(local_cmd) == 1 then
+      cmd = local_cmd
+    end
+    return vim.lsp.rpc.start({ cmd, '--lsp', '--stdio' }, dispatchers)
+  end,
+  filetypes = {
+    -- 'javascript',
+    -- 'javascriptreact',
+    -- 'javascript.jsx',
+    -- 'typescript',
+    -- 'typescriptreact',
+    -- 'typescript.tsx',
+  },
+  root_dir = function(bufnr, on_dir)
+    -- The project root is where the LSP can be started from
+    -- As stated in the documentation above, this LSP supports monorepos and simple projects.
+    -- We select then from the project root, which is identified by the presence of a package
+    -- manager lock file.
+    local root_markers = { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lockb', 'bun.lock' }
+    -- Give the root markers equal priority by wrapping them in a table
+    root_markers = vim.fn.has 'nvim-0.11.3' == 1 and { root_markers, { '.git' } } or vim.list_extend(root_markers, { '.git' })
+
+    -- exclude deno
+    if vim.fs.root(bufnr, { 'deno.json', 'deno.jsonc', 'deno.lock' }) then
+      return
+    end
+
+    -- We fallback to the current working directory if no project root is found
+    local project_root = vim.fs.root(bufnr, root_markers) or vim.fn.getcwd()
+
+    on_dir(project_root)
+  end,
+})
+
 -- Configure denols
 vim.lsp.config('denols', {
   cmd = { 'deno', 'lsp' },
@@ -71,25 +139,40 @@ vim.lsp.config('denols', {
 
 -- read :h vim.lsp.config for changing options of lsp servers
 
-local map = vim.keymap.set
-
-vim.api.nvim_create_autocmd('LspAttach', {
-  callback = function(ev)
-    local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    -- local buffer = ev.buf
-
-    -- Enable LLM-based inline completion
-
-    if client then
-      if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
-        vim.opt.completeopt = { 'menu', 'menuone', 'noinsert', 'fuzzy', 'popup' }
-        vim.lsp.inline_completion.enable(true)
-        map('i', '<A-l>', function()
-          if not vim.lsp.inline_completion.get() then
-            return '<A-l>'
-          end
-        end, { expr = true, replace_keycodes = true, desc = 'Get the current inline completion' })
-      end
-    end
-  end,
-})
+-- local map = vim.keymap.set
+--
+-- -- Global toggle for inline completion
+-- vim.g.inline_completion_enabled = true
+--
+-- vim.keymap.set('n', '<leader>ai', function()
+--   vim.g.inline_completion_enabled = not vim.g.inline_completion_enabled
+--   vim.lsp.inline_completion.enable(vim.g.inline_completion_enabled)
+--   vim.notify('Inline completion: ' .. (vim.g.inline_completion_enabled and 'ON' or 'OFF'), vim.log.levels.INFO)
+-- end, { desc = 'Toggle inline completion' })
+--
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   callback = function(ev)
+--     local client = vim.lsp.get_client_by_id(ev.data.client_id)
+--     if not client then
+--       return
+--     end
+--
+--     if client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
+--       -- Respect current toggle state when a client attaches
+--       vim.lsp.inline_completion.enable(vim.g.inline_completion_enabled)
+--
+--       -- Keep your accept key (Alt-l)
+--       vim.keymap.set('i', '<A-l>', function()
+--         -- If inline completion is off, just pass the key through
+--         if not vim.g.inline_completion_enabled then
+--           return '<A-l>'
+--         end
+--
+--         -- If there's an inline suggestion, accept it; otherwise pass through
+--         if not vim.lsp.inline_completion.get() then
+--           return '<A-l>'
+--         end
+--       end, { expr = true, replace_keycodes = true, buffer = ev.buf, desc = 'Accept inline completion' })
+--     end
+--   end,
+-- })

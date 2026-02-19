@@ -7,13 +7,13 @@ local spec = {
         'hover.providers.lsp',
         'hover.providers.dap',
         'hover.providers.man',
-        'hover.providers.dictionary',
+        -- 'hover.providers.dictionary',
         -- Optional, disabled by default:
         'hover.providers.gh',
         'hover.providers.gh_user',
         -- 'hover.providers.jira',
         'hover.providers.fold_preview',
-        'hover.providers.highlight',
+        -- 'hover.providers.highlight',
       },
       mouse_providers = {
         'hover.providers.lsp',

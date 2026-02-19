@@ -1,6 +1,125 @@
 require("nvchad.configs.lspconfig").defaults()
 
-local servers = { "html", "cssls", "biome", "python-lsp-server" }
+-- local cmp = require "cmp"
+-- cmp.setup {
+--   sources = {
+--     { name = "copilot", group_index = 2 },
+--   },
+-- }
+
+local servers = { "html", "cssls", "vtsls", "svelte", "tailwindcss", "biome", "ruff", "deno", "copilot" }
+vim.diagnostic.config { virtual_text = false, virtual_lines = true }
 vim.lsp.enable(servers)
 
--- read :h vim.lsp.config for changing options of lsp servers 
+-- read :h vim.lsp.config for changing options of lsp servers
+-- Detect if current buffer is part of a Deno project
+
+local function is_deno_project(bufnr)
+  local root = vim.fs.root(bufnr or 0, { "deno.json", "deno.jsonc" })
+  return root ~= nil
+end
+
+vim.lsp.config("stylua", {
+  cmd = { "stylua", "--lsp" },
+  filetypes = { "lua" },
+  root_markers = { ".stylua.toml", "stylua.toml", ".editorconfig" },
+})
+
+vim.lsp.config("ruff", {
+  cmd = { "ruff", "server" },
+  filetypes = { "python" },
+  root_markers = { "pyproject.toml", "ruff.toml", ".git" },
+  settings = {},
+})
+
+-- Configure vtsls
+vim.lsp.config("vtsls", {
+  cmd = { "vtsls", "--stdio" },
+  init_options = {
+    hostInfo = "neovim",
+  },
+  filetypes = {
+    "javascript",
+    "javascriptreact",
+    "javascript.jsx",
+    "typescript",
+    "typescriptreact",
+    "typescript.tsx",
+  },
+  root_dir = function(bufnr, on_dir)
+    -- skip if Deno project detected
+    if is_deno_project(bufnr) then
+      vim.schedule(function()
+        vim.notify("[LSP] Skipping vtsls (Deno project detected)", vim.log.levels.INFO)
+      end)
+      return
+    end
+
+    -- otherwise, normal vtsls root detection
+    local root_markers = {
+      "package-lock.json",
+      "yarn.lock",
+      "pnpm-lock.yaml",
+      "bun.lockb",
+      "bun.lock",
+      ".git",
+    }
+    local project_root = vim.fs.root(bufnr, root_markers) or vim.fn.getcwd()
+    on_dir(project_root)
+  end,
+})
+
+-- Configure TSGO
+vim.lsp.config("tsgo", {
+  cmd = function(dispatchers, config)
+    local cmd = "tsgo"
+    local local_cmd = (config or {}).root_dir and config.root_dir .. "/node_modules/.bin/tsgo"
+    if local_cmd and vim.fn.executable(local_cmd) == 1 then
+      cmd = local_cmd
+    end
+    return vim.lsp.rpc.start({ cmd, "--lsp", "--stdio" }, dispatchers)
+  end,
+  filetypes = {
+    -- 'javascript',
+    -- 'javascriptreact',
+    -- 'javascript.jsx',
+    -- 'typescript',
+    -- 'typescriptreact',
+    -- 'typescript.tsx',
+  },
+  root_dir = function(bufnr, on_dir)
+    -- The project root is where the LSP can be started from
+    -- As stated in the documentation above, this LSP supports monorepos and simple projects.
+    -- We select then from the project root, which is identified by the presence of a package
+    -- manager lock file.
+    local root_markers = { "package-lock.json", "yarn.lock", "pnpm-lock.yaml", "bun.lockb", "bun.lock" }
+    -- Give the root markers equal priority by wrapping them in a table
+    root_markers = vim.fn.has "nvim-0.11.3" == 1 and { root_markers, { ".git" } }
+      or vim.list_extend(root_markers, { ".git" })
+
+    -- exclude deno
+    if vim.fs.root(bufnr, { "deno.json", "deno.jsonc", "deno.lock" }) then
+      return
+    end
+
+    -- We fallback to the current working directory if no project root is found
+    local project_root = vim.fs.root(bufnr, root_markers) or vim.fn.getcwd()
+
+    on_dir(project_root)
+  end,
+})
+
+-- Configure denols
+vim.lsp.config("denols", {
+  cmd = { "deno", "lsp" },
+  root_dir = function(bufnr, on_dir)
+    local deno_root = vim.fs.root(bufnr, { "deno.json", "deno.jsonc" })
+    if deno_root then
+      on_dir(deno_root)
+    end
+  end,
+  init_options = {
+    lint = true,
+    unstable = true,
+  },
+})

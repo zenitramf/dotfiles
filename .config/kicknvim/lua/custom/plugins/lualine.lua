@@ -11,6 +11,18 @@ local spec = {
       return vim.fn.col '.' .. ''
     end
 
+    function StatusLine_InlineCompletion()
+      if vim.g.inline_completion_enabled == nil then
+        return ''
+      end
+
+      if vim.g.inline_completion_enabled then
+        return '󰚩 AI ON' -- enabled icon
+      else
+        return '󰚩 AI OFF' -- disabled icon
+      end
+    end
+
     function StatusLine_Mode()
       local mode_map = {
         ['n'] = 'N',
@@ -58,6 +70,7 @@ local spec = {
         lualine_c = {
           {
             'filename',
+            path = 3,
             on_click = function(number, mousebutton, clicks, modifiers)
               if mousebutton == 'l' then
                 return require('oil').open()
@@ -65,7 +78,7 @@ local spec = {
             end,
           },
         },
-        lualine_x = {},
+        lualine_x = { StatusLine_InlineCompletion },
         lualine_y = {
           {
             'lsp_status',

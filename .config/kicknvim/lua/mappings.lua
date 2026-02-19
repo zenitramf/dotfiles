@@ -33,14 +33,11 @@ map('n', 'zK', function()
   end
 end, { desc = 'Peek Fold' })
 
--- Atone Undo Toggle
-map('n', '<leader>uu', '<cmd> Atone toggle <cr>', { desc = 'Atone Undo Toggle' })
-
 -- Snacks Terminal
 local Snacks = require 'snacks'
 local termOpts = { start_insert = false }
 
-map({ 'n', 't' }, '<C-t>', function()
+map({ 'n', 't' }, '<C-/>', function()
   Snacks.terminal.toggle(null, termOpts)
 end, { desc = 'Terminal' })
 
@@ -96,3 +93,5 @@ end, { desc = 'Open Dashboard' })
 
 -- Select All
 map('n', '<C-a>', 'gg<S-v>G')
+-- Renmae
+vim.keymap.set('n', '<leader>rn', ':IncRename ')

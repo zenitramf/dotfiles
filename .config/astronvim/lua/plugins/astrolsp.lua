@@ -1,5 +1,3 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- AstroLSP allows you to customize the features in AstroNvim's LSP configuration engine
 -- Configuration documentation can be found with `:h astrolsp`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
@@ -45,6 +43,52 @@ return {
     ---@diagnostic disable: missing-fields
     config = {
       -- clangd = { capabilities = { offsetEncoding = "utf-8" } },
+
+      vtsls = {
+        cmd = { "vtsls", "--stdio" },
+        init_options = {
+          hostInfo = "neovim",
+        },
+
+        -- Important: return a string path (or nil), don't use on_dir callback
+        root_dir = function(fname, bufnr)
+          bufnr = bufnr or vim.fn.bufnr(fname)
+
+          -- Detect Deno project by walking upward
+          local deno_root = vim.fs.root(fname, { "deno.json", "deno.jsonc" })
+          if deno_root then
+            vim.schedule(function() vim.notify("[LSP] Skipping vtsls (Deno project detected)", vim.log.levels.INFO) end)
+            return nil
+          end
+
+          local root_markers = {
+            "package-lock.json",
+            "yarn.lock",
+            "pnpm-lock.yaml",
+            "bun.lockb",
+            "bun.lock",
+            ".git",
+          }
+
+          return vim.fs.root(fname, root_markers) or vim.fn.getcwd()
+        end,
+
+        -- Optional but recommended so returning nil actually prevents startup on random files
+        single_file_support = false,
+      },
+
+      denols = {
+        cmd = { "deno", "lsp" },
+        root_dir = function(fname)
+          local deno_root = vim.fs.root(fname, { "deno.json", "deno.jsonc" })
+          if deno_root then return deno_root end
+          return nil
+        end,
+        init_options = {
+          lint = true,
+          unstable = true,
+        },
+      },
     },
     -- customize how language servers are attached
     handlers = {
@@ -101,5 +145,18 @@ return {
       -- this would disable semanticTokensProvider for all clients
       -- client.server_capabilities.semanticTokensProvider = nil
     end,
+  },
+  root_dir = require("lspconfig.util").root_pattern("biome.json", "biome.jsonc", "package.json"),
+  single_file_support = true,
+  capabilities = {
+    offsetEncoding = { "utf-16" }, -- Ensure this is a list
+  },
+  -- Force diagnostics even if config is missing
+  settings = {
+    biome = {
+      lint = {
+        enable = true,
+      },
+    },
   },
 }

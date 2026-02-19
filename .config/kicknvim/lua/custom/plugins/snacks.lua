@@ -91,7 +91,7 @@ local pickerSpec = {
   {
     '<leader><space>',
     function()
-      Snacks.picker.buffers()
+      Snacks.picker.files()
     end,
     desc = 'Find Buffers',
   },

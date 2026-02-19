@@ -15,11 +15,17 @@ alias fishconfig="nvim ~/dotfiles/.config/fish/config.fish"
 alias nvimconfig="cd ~/dotfiles/.config/kicknvim/ && nvim ."
 alias zw='sesh connect zenwiki -c "cd ~/git/zenwiki && nvim "'
 
+# --- Zed (WSL Remote) ---
+# fish aliases can't forward args reliably; use a function instead.
+functions -e zed 2>/dev/null
+function zed --description "Open Zed from WSL using Windows Zed in Remote WSL mode"
+    /mnt/c/Users/marti/AppData/Local/Programs/Zed/Zed.exe $argv
+end
+
 set -x NVIM_APPNAME kicknvim
 set -x PATH $PATH:/usr/local/bin
 set -x PATH "/snap/bin:$PATH"
 set -x PATH "$HOME/.local/bin:$PATH"
-
 
 zoxide init --cmd cd fish | source
 

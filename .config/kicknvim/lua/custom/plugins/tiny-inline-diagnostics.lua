@@ -1,3 +1,6 @@
+if true then
+  return {}
+end
 local spec = {
   'rachartier/tiny-inline-diagnostic.nvim',
   event = 'VeryLazy',

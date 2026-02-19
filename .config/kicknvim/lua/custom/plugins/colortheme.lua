@@ -21,6 +21,14 @@ local tokyo = { -- You can easily change to a different colorscheme.
     vim.cmd.colorscheme 'tokyonight-night'
   end,
 }
+
+local oxo = {
+  'nyoom-engineering/oxocarbon.nvim',
+  config = function()
+    vim.cmd.colorscheme 'oxocarbon'
+  end,
+}
+
 local kanagawa = {
   'rebelot/kanagawa.nvim',
   config = function()
@@ -30,6 +38,20 @@ local kanagawa = {
       globalStatus = true,
     }
     vim.cmd.colorscheme 'kanagawa-wave'
+  end,
+}
+
+local catppuccin = {
+  'catppuccin/nvim',
+  name = 'catppuccin',
+  config = function()
+    require('catppuccin').setup {
+      transparent_background = true,
+      styles = {
+        comments = { 'italic' }, -- Disable italics in comments
+      },
+    }
+    vim.cmd.colorscheme 'catppuccin-mocha'
   end,
 }
 
@@ -63,4 +85,4 @@ local gruvbox = {
   end,
 }
 
-return gruvbox
+return oxo

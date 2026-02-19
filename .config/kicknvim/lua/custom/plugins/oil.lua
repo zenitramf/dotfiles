@@ -9,6 +9,10 @@ local oil = {
         'icon',
       },
       keymaps = {
+        ['<leader>e'] = {
+          'actions.close',
+          mode = 'n',
+        },
         gs = {
           callback = function()
             -- get the current directory
