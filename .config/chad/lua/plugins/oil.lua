@@ -66,6 +66,7 @@ local oil = {
 local oil_diag = {
   "JezerM/oil-lsp-diagnostics.nvim",
   dependencies = { "stevearc/oil.nvim" },
+  event = "VeryLazy",
   opts = {},
 }
 

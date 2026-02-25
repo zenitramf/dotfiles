@@ -1,0 +1,6 @@
+os:
+  edit: "nvim {{filename}}"
+  editAtLine: "nvim +{{line}} {{filename}}"
+  editAtLineAndWait: "nvim --headless -c 'normal {{line}}G' -c 'startinsert' {{filename}}"
+  openDirInEditor: "nvim {{dir}}"
+  editInTerminal: true

@@ -5,7 +5,6 @@ local options = {
       args = {
         "--fix",
         "--quiet",
-        "--deny-warnings",
         "$FILENAME",
       },
       stdin = false, -- IMPORTANT: oxlint works on files, not stdin
