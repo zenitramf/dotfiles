@@ -663,7 +663,6 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
         'vtsls',
         -- 'tsgo',
-        'biome',
         'ruff',
         'tailwindcss',
         'copilot',
@@ -705,7 +704,7 @@ require('lazy').setup({
       },
     },
     opts = {
-      notify_on_error = false,
+      notify_on_error = true,
       format_on_save = function(bufnr)
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
@@ -720,18 +719,19 @@ require('lazy').setup({
           }
         end
       end,
-      formatters_by_ft = {
 
+      formatters_by_ft = {
         lua = { 'stylua' },
-        javascript = { 'biome', 'biome-check', 'biome-organize-imports' },
-        javascriptreact = { 'biome', 'biome-check', 'biome-organize-imports' },
-        ['javascript.jsx'] = { 'biome', 'biome-check', 'biome-organize-imports' },
-        typescript = { 'biome', 'biome-check', 'biome-organize-imports' },
-        typescriptreact = { 'biome', 'biome-check', 'biome-organize-imports' },
-        ['typescript.tsx'] = { 'biome', 'biome-check', 'biome-organize-imports' },
-        css = { 'biome' },
-        html = { 'biome' },
-        astro = { 'biome' },
+        javascript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        ['javascript.jsx'] = { 'prettier' },
+        typescript = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        ['typescript.tsx'] = { 'prettier' },
+        svelte = { 'prettier' },
+        css = { 'prettier' },
+        html = { 'prettier' },
+        astro = { 'prettier' },
         markdown = { 'markdownlint' },
         json = { 'jq' },
 
@@ -739,7 +739,7 @@ require('lazy').setup({
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        -- javascript = { "oxfmt", "prettier", stop_after_first = true },
       },
     },
   },
@@ -950,7 +950,7 @@ require('lazy').setup({
   --
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps

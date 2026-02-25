@@ -1,6 +1,3 @@
-if true then
-  return {}
-end
 local spec = {
   'rachartier/tiny-inline-diagnostic.nvim',
   event = 'VeryLazy',
@@ -8,8 +5,15 @@ local spec = {
   config = function()
     require('tiny-inline-diagnostic').setup {
       preset = 'amongus',
+      options = {
+        add_messages = {
+          display_count = true,
+        },
+        multilines = {
+          enabled = true,
+        },
+      },
     }
-    vim.diagnostic.config { virtual_text = false } -- Disable Neovim's default virtual text diagnostics
   end,
 }
 

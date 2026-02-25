@@ -22,7 +22,7 @@ function zed --description "Open Zed from WSL using Windows Zed in Remote WSL mo
     /mnt/c/Users/marti/AppData/Local/Programs/Zed/Zed.exe $argv
 end
 
-set -x NVIM_APPNAME kicknvim
+set -x NVIM_APPNAME chad
 set -x PATH $PATH:/usr/local/bin
 set -x PATH "/snap/bin:$PATH"
 set -x PATH "$HOME/.local/bin:$PATH"

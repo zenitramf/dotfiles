@@ -146,17 +146,9 @@ return {
       -- client.server_capabilities.semanticTokensProvider = nil
     end,
   },
-  root_dir = require("lspconfig.util").root_pattern("biome.json", "biome.jsonc", "package.json"),
   single_file_support = true,
   capabilities = {
     offsetEncoding = { "utf-16" }, -- Ensure this is a list
   },
   -- Force diagnostics even if config is missing
-  settings = {
-    biome = {
-      lint = {
-        enable = true,
-      },
-    },
-  },
 }

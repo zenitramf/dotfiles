@@ -13,4 +13,4 @@ require('ufo').setup {
 
 -- Blink CMP Mappings
 
-vim.diagnostic.config { virtual_lines = true, virtual_text = false }
+vim.diagnostic.config { virtual_lines = false, virtual_text = false }

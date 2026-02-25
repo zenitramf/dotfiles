@@ -3,7 +3,6 @@ local spec = {
   dependencies = {
     { 'nvim-lua/plenary.nvim' },
     {
-      'folke/snacks.nvim',
       opts = {
         terminal = {},
       },

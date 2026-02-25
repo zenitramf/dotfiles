@@ -1,16 +1,13 @@
-if true then
-  return {}
-end
-
 return {
-
   { -- Linting
     'mfussenegger/nvim-lint',
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
+      -- Apply eslint_d to ALL JS-like filetypes you care about
       lint.linters_by_ft = {
-        markdown = { 'markdownlint' },
+        -- add more if you want:
+        -- json = { "eslint_d" } -- usually not, but possible with eslint-plugin-jsonc
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,

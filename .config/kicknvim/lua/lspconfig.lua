@@ -46,6 +46,32 @@ vim.lsp.config('lua_ls', {
   },
 })
 
+vim.lsp.config('unocss', {
+  root_dir = function(bufnr, on_dir)
+    local root = vim.fs.root(bufnr, {
+      'uno.config.ts',
+    })
+
+    if root then
+      on_dir(root)
+    end
+    -- If nil, LSP will NOT start
+  end,
+})
+
+vim.lsp.config('tailwindcss', {
+  root_dir = function(bufnr, on_dir)
+    local root = vim.fs.root(bufnr, {
+      'tailwind.config.ts',
+      'tailwind.config.js',
+    })
+
+    if root then
+      on_dir(root)
+    end
+  end,
+})
+
 -- Configure vtsls
 vim.lsp.config('vtsls', {
   cmd = { 'vtsls', '--stdio' },

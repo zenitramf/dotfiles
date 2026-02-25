@@ -55,6 +55,19 @@ local catppuccin = {
   end,
 }
 
+local onedark = {
+  'navarasu/onedark.nvim',
+  priority = 1000, -- make sure to load this before all the other start plugins
+  config = function()
+    require('onedark').setup {
+      style = 'darker',
+      transparent = true,
+    }
+    require('onedark').load()
+    vim.cmd.colorscheme 'onedark'
+  end,
+}
+
 local github = {
   'projekt0n/github-nvim-theme',
   name = 'github-theme',
@@ -63,7 +76,7 @@ local github = {
   config = function()
     require('github-theme').setup {
       options = {
-        transparent = true,
+        transparent = false,
         styles = {
           comments = 'italic', -- Disable italics in comments
           functions = 'bold',
@@ -85,4 +98,4 @@ local gruvbox = {
   end,
 }
 
-return oxo
+return onedark

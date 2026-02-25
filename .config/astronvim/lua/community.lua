@@ -6,10 +6,9 @@
 return {
   "AstroNvim/astrocommunity",
   { import = "astrocommunity.pack.lua" },
-  { import = "astrocommunity.pack.biome" },
   { import = "astrocommunity.pack.svelte" },
+  { import = "astrocommunity.pack.oxlint" },
   { import = "astrocommunity.ai.sidekick-nvim" },
-  { import = "astrocommunity.completion.avante-nvim" },
   { import = "astrocommunity.file-explorer.oil-nvim" },
   { import = "astrocommunity.editing-support.conform-nvim" },
 
