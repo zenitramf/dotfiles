@@ -25,3 +25,75 @@ map("n", "<S-l>", "<cmd> bnext <cr>", { desc = "Next buffer" })
 
 -- Select All
 map("n", "<C-a>", "gg<S-v>G")
+
+-- Tab Open on Space
+map("n", "<leader><space>", "<cmd>Telescope buffers<CR>", { desc = "View Buffers (Telescope)" })
+
+map("n", "<leader>x", "<cmd>bdelete<CR>", { desc = "Close Buffer" })
+
+map("n", "<leader>fc", function()
+  local builtin = require "telescope.builtin"
+  builtin.find_files {
+    cwd = vim.fn.stdpath "config",
+    hidden = true,
+  }
+end, { desc = "Find Config Files (Telescope)" })
+
+-- Opencode
+map({ "n", "x" }, "<leader-ox>", function()
+  require("opencode").select()
+end, { desc = "Execute opencode action…" })
+
+map({ "n", "x" }, "go", function()
+  return require("opencode").operator "@this "
+end, { desc = "Add range to opencode", expr = true })
+
+map("n", "goo", function()
+  return require("opencode").operator "@this " .. "_"
+end, { desc = "Add line to opencode", expr = true })
+
+map({ "n", "x" }, "goa", function()
+  require("opencode").ask("@this: ", { submit = true })
+end, { desc = "Ask opencode…" })
+
+local function tmux_jump_to_opencode()
+  if not vim.env.TMUX or vim.env.TMUX == "" then
+    vim.notify("Not inside tmux ($TMUX not set)", vim.log.levels.WARN)
+    return
+  end
+
+  -- target format: session:window.pane (e.g. work:3.1)
+  local lines =
+    vim.fn.systemlist [[tmux list-panes -a -F '#{session_name}:#{window_index}.#{pane_index} #{pane_current_command}']]
+  if vim.v.shell_error ~= 0 then
+    vim.notify("tmux list-panes failed", vim.log.levels.ERROR)
+    return
+  end
+
+  local pane_target
+  for _, line in ipairs(lines) do
+    local target, cmd = line:match "^(%S+)%s+(%S+)$"
+    if target and cmd == "opencode" then
+      pane_target = target
+      break
+    end
+  end
+
+  if not pane_target then
+    vim.notify("No opencode pane found in tmux session", vim.log.levels.WARN)
+    return
+  end
+
+  local session, win = pane_target:match "^([^:]+):(%d+)%.%d+$"
+  if not session or not win then
+    vim.notify("Could not parse tmux target: " .. pane_target, vim.log.levels.ERROR)
+    return
+  end
+
+  -- Switch to that session (if different), then window, then pane
+  vim.fn.system { "tmux", "switch-client", "-t", session }
+  vim.fn.system { "tmux", "select-window", "-t", session .. ":" .. win }
+  vim.fn.system { "tmux", "select-pane", "-t", pane_target }
+end
+
+map({ "n", "x" }, "<leader>oj", tmux_jump_to_opencode, { desc = "Jump to opencode tmux pane" })

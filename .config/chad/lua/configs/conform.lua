@@ -8,6 +8,7 @@ local options = {
         "$FILENAME",
       },
       stdin = false, -- IMPORTANT: oxlint works on files, not stdin
+      exit_codes = { 0, 1 },
     },
   },
   formatters_by_ft = {
@@ -23,7 +24,7 @@ local options = {
     html = { "oxlint_fix", "prettier" },
     astro = { "oxlint_fix", "prettier" },
     markdown = { "markdownlint" },
-    json = { "jq" },
+    json = { "prettier" },
 
     -- Conform can also run multiple formatters sequentially
     -- python = { "isort", "black" },
