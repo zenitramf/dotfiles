@@ -18,13 +18,15 @@ local config = wezterm.config_builder()
 -- For example, changing the color scheme:
 config.color_scheme = "GitHub Dark"
 
-config.keys = {
-	{
-		key = "v",
-		mods = "SHIFT|CTRL",
-		action = wezterm.action.PasteFrom("Clipboard"),
-	},
-}
+-- config.keys = {
+-- 	{
+-- 		key = "v",
+-- 		mods = "SHIFT|CTRL",
+-- 		action = wezterm.action.PasteFrom("Clipboard"),
+-- 	},
+-- }
+
+config.audible_bell = "Disabled"
 
 -- config.ssh_domains = {
 -- 	{

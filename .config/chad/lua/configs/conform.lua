@@ -25,6 +25,9 @@ local options = {
     astro = { "oxlint_fix", "prettier" },
     markdown = { "markdownlint" },
     json = { "prettier" },
+    sql = { "pg_format " },
+    go = { "gofmt" },
+    yaml = { "prettier" },
 
     -- Conform can also run multiple formatters sequentially
     -- python = { "isort", "black" },

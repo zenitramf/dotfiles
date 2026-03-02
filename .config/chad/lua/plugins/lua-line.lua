@@ -51,7 +51,7 @@ local spec = {
 
     require("lualine").setup {
       options = {
-        theme = "iceberg_dark",
+        theme = "ayu_dark",
         section_separators = "",
         component_separators = "",
       },

@@ -22,10 +22,13 @@ local servers = {
   "prismals",
   "copilot",
   "jqls",
+  "gopls",
+  "astro",
+  "yamlls",
 }
 vim.lsp.enable(servers)
 -- read :h vim.lsp.config for changing options of lsp servers
---
+
 ---@type vim.lsp.Config
 vim.lsp.config("svelteserver", {
   cmd = { "svelteserver", "--stdio" },

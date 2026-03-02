@@ -7,6 +7,25 @@ o.cursorlineopt = "both" -- to enable cursorline!
 
 o.clipboard = "unnamedplus"
 
+o.foldmethod = "expr"
+o.foldexpr = "nvim_treesitter#foldexpr()"
+
+o.foldcolumn = "auto"
+o.foldlevel = 99 -- Using ufo provider need a large value
+o.foldlevelstart = 99
+o.foldnestmax = 0
+o.foldenable = true
+o.foldmethod = "indent"
+
+vim.opt.fillchars = {
+  fold = " ",
+  foldopen = "",
+  foldsep = " ",
+  foldclose = "",
+  stl = " ",
+  eob = " ",
+}
+
 -- Force clipboard integration in WSL (Windows clipboard)
 vim.g.clipboard = {
   name = "win32yank-wsl",

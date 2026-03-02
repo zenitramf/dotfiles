@@ -9,7 +9,7 @@ map("i", "jk", "<ESC>")
 map("n", "<leader>gf", ":Git<CR>", { desc = "Git Fugitive" })
 
 -- Code action shortcut
-map({ "n", "x" }, "<leader>ca", function()
+map({ "n", "x" }, "<leader>cr", function()
   require("tiny-code-action").code_action()
 end, { noremap = true, silent = true, desc = "Code Action" })
 
@@ -97,3 +97,6 @@ local function tmux_jump_to_opencode()
 end
 
 map({ "n", "x" }, "<leader>oj", tmux_jump_to_opencode, { desc = "Jump to opencode tmux pane" })
+
+-- LSPUI
+map({ "n" }, "<leader>ca", "<cmd>LspUI code_action<CR>")
