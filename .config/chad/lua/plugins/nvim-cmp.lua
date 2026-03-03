@@ -5,7 +5,7 @@ local spec = {
 
     -- Example: change sources order / add sources
     opts.sources = cmp.config.sources {
-      { name = "copilot", group_index = 2 },
+      { name = "copilot" },
       { name = "nvim_lsp" },
       { name = "path" },
       { name = "vim-dadbod-completion" },
