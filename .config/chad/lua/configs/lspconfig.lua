@@ -25,6 +25,7 @@ local servers = {
   "gopls",
   "astro",
   "yamlls",
+  "just",
 }
 vim.lsp.enable(servers)
 -- read :h vim.lsp.config for changing options of lsp servers

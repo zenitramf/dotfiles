@@ -13,7 +13,7 @@ local options = {
   },
   formatters_by_ft = {
     lua = { "stylua" },
-    javascript = { "oxlint_fix", "prettier" },
+    javascript = { "oxlint_fix", "oxfmt", "prettier" },
     javascriptreact = { "oxlint_fix", "prettier" },
     ["javascript.jsx"] = { "oxlint_fix", "prettier" },
     typescript = { "oxlint_fix", "prettier" },
@@ -28,6 +28,7 @@ local options = {
     sql = { "pg_format " },
     go = { "gofmt" },
     yaml = { "prettier" },
+    just = { "just" },
 
     -- Conform can also run multiple formatters sequentially
     -- python = { "isort", "black" },

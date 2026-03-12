@@ -100,3 +100,40 @@ map({ "n", "x" }, "<leader>oj", tmux_jump_to_opencode, { desc = "Jump to opencod
 
 -- LSPUI
 map({ "n" }, "<leader>ca", "<cmd>LspUI code_action<CR>")
+
+-- Snacks Terminal
+
+local Snacks = require "snacks"
+local termOpts = { start_insert = false }
+
+map({ "n", "t" }, "<C-/>", function()
+  Snacks.terminal.toggle(null, termOpts)
+end, { desc = "Terminal" })
+
+map({ "n", "t" }, "<leader>h", function()
+  Snacks.terminal.toggle(null, termOpts)
+end, { desc = "Terminal" })
+
+map("t", "<C-n>", function()
+  local opts = { start_insert = false }
+  Snacks.terminal.open(null, termOpts)
+end, { desc = "Terminal" })
+-- Snacks Zen
+map("n", "<leader>z", function()
+  Snacks.zen()
+end, { desc = "Toggle Zen Mode" })
+
+-- PI
+map("n", "<leader>ai", ":PiAsk<CR>", { desc = "Ask pi" })
+
+map("v", "<leader>ai", ":PiAskSelection<CR>", { desc = "Ask pi (selection)" })
+
+-- LazyGit
+map("n", "<leader>gg", function()
+  if vim.env.TMUX and vim.env.TMUX ~= "" then
+    vim.fn.jobstart({ "tmux", "popup", "-E", "-w", "90%", "-h", "90%", "-T", "LazyGit", "lazygit" }, { detach = true })
+    return
+  end
+
+  vim.cmd "LazyGit"
+end, { desc = "LazyGit" })
