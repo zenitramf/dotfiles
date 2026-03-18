@@ -1,3 +1,4 @@
+---@diagnostic disable: unused-local, undefined-global
 require "nvchad.mappings"
 
 -- add yours here
@@ -12,32 +13,24 @@ map("n", "<leader>gf", ":Git<CR>", { desc = "Git Fugitive" })
 map({ "n", "x" }, "<leader>cr", function()
   require("tiny-code-action").code_action()
 end, { noremap = true, silent = true, desc = "Code Action" })
-
--- Terminal window navigation with Ctrl + h/j/k/l
-map("t", "<C-h>", [[<C-\><C-n><C-w>h]], { noremap = true, silent = true })
-map("t", "<C-j>", [[<C-\><C-n><C-w>j]], { noremap = true, silent = true })
-map("t", "<C-k>", [[<C-\><C-n><C-w>k]], { noremap = true, silent = true })
-map("t", "<C-l>", [[<C-\><C-n><C-w>l]], { noremap = true, silent = true })
-
 -- Buffer navigation with Shift + h/l
 map("n", "<S-h>", "<cmd> bprev <cr>", { desc = "Previous buffer" })
 map("n", "<S-l>", "<cmd> bnext <cr>", { desc = "Next buffer" })
 
 -- Select All
 map("n", "<C-a>", "gg<S-v>G")
+map("n", "<leader>x", function()
+  local current = vim.api.nvim_get_current_buf()
+  local buffers = vim.fn.getbufinfo { buflisted = 1 }
 
--- Tab Open on Space
-map("n", "<leader><space>", "<cmd>Telescope buffers<CR>", { desc = "View Buffers (Telescope)" })
+  if #buffers > 1 then
+    vim.cmd "bnext"
+  else
+    vim.cmd "enew"
+  end
 
-map("n", "<leader>x", "<cmd>bdelete<CR>", { desc = "Close Buffer" })
-
-map("n", "<leader>fc", function()
-  local builtin = require "telescope.builtin"
-  builtin.find_files {
-    cwd = vim.fn.stdpath "config",
-    hidden = true,
-  }
-end, { desc = "Find Config Files (Telescope)" })
+  vim.cmd("bdelete " .. current)
+end, { desc = "Close Buffer" })
 
 -- Opencode
 map({ "n", "x" }, "<leader-ox>", function()
@@ -99,7 +92,9 @@ end
 map({ "n", "x" }, "<leader>oj", tmux_jump_to_opencode, { desc = "Jump to opencode tmux pane" })
 
 -- LSPUI
-map({ "n" }, "<leader>ca", "<cmd>LspUI code_action<CR>")
+map({ "n" }, "<leader>ca", function()
+  require("tiny-code-action").code_action()
+end)
 
 -- Snacks Terminal
 
@@ -118,6 +113,12 @@ map("t", "<C-n>", function()
   local opts = { start_insert = false }
   Snacks.terminal.open(null, termOpts)
 end, { desc = "Terminal" })
+
+map("n", "<leader>ft", function()
+  local opts = { start_insert = false }
+  Snacks.picker()
+end, { desc = "Terminal" })
+
 -- Snacks Zen
 map("n", "<leader>z", function()
   Snacks.zen()
@@ -137,3 +138,52 @@ map("n", "<leader>gg", function()
 
   vim.cmd "LazyGit"
 end, { desc = "LazyGit" })
+
+-- Tab Open on Space
+map("n", "<leader><space>", function()
+  Snacks.picker.buffers()
+end, { desc = "View Buffers" })
+
+-- Snacks File Open
+map("n", "<leader>ff", function()
+  Snacks.picker.files()
+end, { desc = "View Files" })
+
+-- Snacks File Open
+map("n", "<leader>fb", function()
+  Snacks.picker.files()
+end, { desc = "View Files" })
+
+-- Snacks Grep
+map("n", "<leader>fw", function()
+  Snacks.picker.grep()
+end, { desc = "Grep in Files" })
+
+-- Snacks Grep
+map("n", "<leader>fz", function()
+  Snacks.picker.grep_buffers()
+end, { desc = "Grep in Buffers" })
+
+-- Snacks File Open
+map("n", "<leader>fo", function()
+  Snacks.picker.recent()
+end, { desc = "View Recent Files" })
+
+-- Config
+map("n", "<leader>fc", function()
+  Snacks.picker.files {
+    cwd = vim.fn.stdpath "config",
+    hidden = true,
+  }
+end, { desc = "Find Config Files (Telescope)" })
+
+-- TMUX Nav
+map("n", "<C-h>", "<Cmd>TmuxNavigateLeft<CR>", { silent = true })
+map("n", "<C-j>", "<Cmd>TmuxNavigateDown<CR>", { silent = true })
+map("n", "<C-k>", "<Cmd>TmuxNavigateUp<CR>", { silent = true })
+map("n", "<C-l>", "<Cmd>TmuxNavigateRight<CR>", { silent = true })
+
+map("t", "<C-h>", [[<C-\><C-n><Cmd>TmuxNavigateLeft<CR>]], { silent = true })
+map("t", "<C-j>", [[<C-\><C-n><Cmd>TmuxNavigateDown<CR>]], { silent = true })
+map("t", "<C-k>", [[<C-\><C-n><Cmd>TmuxNavigateUp<CR>]], { silent = true })
+map("t", "<C-l>", [[<C-\><C-n><Cmd>TmuxNavigateRight<CR>]], { silent = true })

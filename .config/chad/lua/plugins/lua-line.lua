@@ -61,7 +61,7 @@ local spec = {
           "diff",
           {
             "diagnostics",
-            on_click = function(number, mousebutton, clicks, modifiers)
+            on_click = function(mousebutton)
               if mousebutton == "l" then
                 return vim.cmd "Trouble diagnostics toggle filter.buf=0"
               end
@@ -72,7 +72,7 @@ local spec = {
           {
             "filename",
             path = 3,
-            on_click = function(number, mousebutton, clicks, modifiers)
+            on_click = function(mousebutton)
               if mousebutton == "l" then
                 return require("oil").open()
               end
@@ -83,7 +83,7 @@ local spec = {
         lualine_y = {
           {
             "lsp_status",
-            on_click = function(number, mousebutton, clicks, modifiers)
+            on_click = function(mousebutton)
               if mousebutton == "l" then
                 return vim.cmd.LspInfo()
               end

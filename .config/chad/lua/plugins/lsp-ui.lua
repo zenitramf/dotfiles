@@ -1,3 +1,6 @@
+if true then
+  return {}
+end
 ---@type NvPluginSpec
 local spec = {
   "jinzhongjia/LspUI.nvim",

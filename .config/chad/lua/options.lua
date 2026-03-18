@@ -17,6 +17,12 @@ o.foldnestmax = 0
 o.foldenable = true
 o.foldmethod = "indent"
 
+o.winheight = 25
+o.winminheight = 25
+o.winwidth = 20
+o.winminwidth = 10
+o.equalalways = false
+
 vim.opt.fillchars = {
   fold = " ",
   foldopen = "",
@@ -39,3 +45,5 @@ vim.g.clipboard = {
   },
   cache_enabled = 0,
 }
+
+vim.lsp.inlay_hint.enable(false)

@@ -26,6 +26,7 @@ local servers = {
   "astro",
   "yamlls",
   "just",
+  "pyright",
 }
 vim.lsp.enable(servers)
 -- read :h vim.lsp.config for changing options of lsp servers
@@ -106,6 +107,7 @@ vim.lsp.config("lua_ls", {
       telemetry = {
         enable = false,
       },
+      hint = { enable = true },
     },
   },
 })

@@ -5,7 +5,7 @@ local spec = {
   },
   event = "LspAttach",
   opts = {
-    picker = "telescope",
+    picker = "snacks",
     backend = "delta",
   },
 }

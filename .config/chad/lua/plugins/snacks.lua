@@ -65,7 +65,7 @@ local spec = {
     explorer = { enabled = false },
     indent = {},
     input = {},
-    picker = { enabled = false },
+    picker = { enabled = true, layout = "dropdown" },
     terminal = {},
     notifier = {},
     quickfile = { enabled = false },

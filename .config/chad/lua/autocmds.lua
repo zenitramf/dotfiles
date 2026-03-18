@@ -36,3 +36,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank { timeout = 200, visual = true }
   end,
 })
+
+-- auto resize splits when resizing nvim window
+vim.api.nvim_create_autocmd("VimResized", {
+  command = "wincmd =",
+})
