@@ -36,6 +36,6 @@ zoxide init --cmd cd fish | source
 # opencode
 fish_add_path /home/zenitram/.opencode/bin
 
-function obsidian
-    nohup /home/zenitram/.local/bin/obsidian >/dev/null 2>&1 &
+function obsidian --description "Open Obsidian Terminal"
+ alias obsidian='/mnt/c/Program\ Files/Obsidian/Obsidian.com'
 end

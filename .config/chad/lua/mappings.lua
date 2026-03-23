@@ -169,6 +169,26 @@ map("n", "<leader>fo", function()
   Snacks.picker.recent()
 end, { desc = "View Recent Files" })
 
+-- Snacks  Git Status
+map("n", "<leader>gt", function()
+  Snacks.picker.git_status()
+end, { desc = "Git Status" })
+
+-- Snacks Git Diff
+map("n", "<leader>gd", function()
+  Snacks.picker.git_diff()
+end, { desc = "Git Diff" })
+
+-- Snacks Git Log Line
+map("n", "<leader>gL", function()
+  Snacks.picker.git_log_line()
+end, { desc = "Git Log Line" })
+
+-- Snacks Git Log
+map("n", "<leader>gl", function()
+  Snacks.picker.git_log()
+end, { desc = "Git Log" })
+
 -- Config
 map("n", "<leader>fc", function()
   Snacks.picker.files {

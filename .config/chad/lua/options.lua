@@ -47,3 +47,10 @@ vim.g.clipboard = {
 }
 
 vim.lsp.inlay_hint.enable(false)
+
+vim.filetype.add {
+
+  extension = {
+    mdx = "mdx",
+  },
+}
