@@ -56,7 +56,7 @@ local oil = {
     {
       "<leader>e",
       function()
-        require("oil").open()
+        require("oil").open(nil, { preview = { vertical = true } })
       end,
       desc = "Open parent directory",
     },

@@ -6,7 +6,7 @@ local spec = {
   event = "LspAttach",
   opts = {
     picker = "snacks",
-    backend = "delta",
+    backend = "vim",
   },
 }
 return spec

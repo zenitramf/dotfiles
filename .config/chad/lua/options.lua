@@ -7,21 +7,21 @@ o.cursorlineopt = "both" -- to enable cursorline!
 
 o.clipboard = "unnamedplus"
 
-o.foldmethod = "expr"
-o.foldexpr = "nvim_treesitter#foldexpr()"
-
 o.foldcolumn = "auto"
 o.foldlevel = 99 -- Using ufo provider need a large value
 o.foldlevelstart = 99
-o.foldnestmax = 0
 o.foldenable = true
-o.foldmethod = "indent"
+o.foldmethod = "expr"
+o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 
 o.winheight = 25
 o.winminheight = 25
 o.winwidth = 20
 o.winminwidth = 10
 o.equalalways = false
+
+-- vim.o.shell = "/home/linuxbrew/.linuxbrew/bin/zsh"
+-- vim.o.shellcmdflag = "-lc"
 
 vim.opt.fillchars = {
   fold = " ",

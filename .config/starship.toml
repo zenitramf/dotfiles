@@ -120,6 +120,15 @@ format = '\[[$symbol$project]($style)\]'
 [nim]
 format = '\[[$symbol($version)]($style)\]'
 
+[shell]
+disabled = false
+format = '[$indicator]($style) '
+fish_indicator = '🐟'
+nu_indicator = '🦀'
+zsh_indicator = '💻'
+bash_indicator = '🐚'
+powershell_indicator = '⚡'
+
 [nix_shell]
 format = '\[[$symbol$state( \($name\))]($style)\]'
 
@@ -194,7 +203,7 @@ format = '\[[$symbol$workspace]($style)\]'
 format = '\[[$time]($style)\]'
 
 [username]
-format = '\[[󰣇 $user]($style)\] '
+format = '\[[$user]($style)\] '
 style_user = 'blue bold'
 style_root = 'black bold'
 show_always = true
@@ -210,3 +219,4 @@ format = '\[[$symbol($version)]($style)\]'
 
 [solidity]
 format = '\[[$symbol($version)]($style)\]'
+

@@ -8,6 +8,7 @@ $env.NVIM_APPNAME = "chad"
 $env.PATH = (
     $env.PATH
     | prepend [
+        "/home/zenitram/.vite-plus/bin/"
         "/home/zenitram/.opencode/bin"
         "/home/zenitram/.local/bin"
         "/snap/bin"
