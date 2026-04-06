@@ -47,12 +47,22 @@ require("mason-tool-installer").setup({
 })
 
 local function on_attach(client, bufnr)
+	local Snacks = require("snacks")
 	local function opts(desc)
 		return { buffer = bufnr, desc = "LSP " .. desc }
 	end
 
-	map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
-	map("n", "gd", vim.lsp.buf.definition, opts("Go to definition"))
+	-- map("n", "gD", vim.lsp.buf.declaration, opts("Go to declaration"))
+	-- map("n", "gd", vim.lsp.buf.definition, opts("Go to definition"))
+
+	map("n", "gD", function()
+		Snacks.picker.lsp_declarations()
+	end, opts("Go to declaration"))
+
+	map("n", "gd", function()
+		Snacks.picker.lsp_definitions()
+	end, opts("Go to definition"))
+
 	map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts("Add workspace folder"))
 	map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts("Remove workspace folder"))
 	map("n", "<leader>wl", function()

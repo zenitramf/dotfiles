@@ -1,8 +1,10 @@
 local o = vim.o
+local opt = vim.opt
+local g = vim.g
 -- set <space> as the leader key
 -- must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+g.mapleader = " "
+g.maplocalleader = " "
 
 -- enable true color support
 o.termguicolors = true
@@ -57,6 +59,9 @@ o.cursorlineopt = "both"
 
 -- enable line wrapping
 o.wrap = true
+
+-- disable nvim intro
+opt.shortmess:append("sI")
 
 -- Indenting
 o.expandtab = true

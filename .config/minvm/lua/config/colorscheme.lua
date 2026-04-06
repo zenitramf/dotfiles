@@ -1,6 +1,8 @@
-vim.pack.add({ "https://github.com/navarasu/onedark.nvim" })
-require("onedark").setup({
-	style = "warmer",
-	transparent = false,
+vim.pack.add({ "https://github.com/EdenEast/nightfox.nvim" })
+require("nightfox").setup({
+	options = {
+		transparent = true,
+	},
 })
-require("onedark").load()
+
+vim.cmd("colorscheme nightfox")
