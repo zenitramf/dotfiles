@@ -1,8 +1,6 @@
-local oil = {
-  "stevearc/oil.nvim",
-  config = function()
-    local oil = require "oil"
-    oil.setup {
+vim.pack.add({"https://github.com/stevearc/oil.nvim"})
+local o = require("oil")
+o.setup({
       default_file_explorer = true,
       skip_confirm_for_simple_edits = true,
       columns = {
@@ -16,7 +14,7 @@ local oil = {
         gs = {
           callback = function()
             -- get the current directory
-            local prefills = { paths = oil.get_current_dir() }
+            local prefills = { paths = o.get_current_dir() }
 
             local grug_far = require "grug-far"
             -- instance check
@@ -47,27 +45,5 @@ local oil = {
       },
       watch_for_changes = true,
       show_hidden = true,
-    }
-  end,
-  event = "VeryLazy",
-  cmd = "Oil",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
-  keys = {
-    {
-      "<leader>e",
-      function()
-        require("oil").open()
-      end,
-      desc = "Open parent directory",
-    },
-  },
-}
+    })
 
-local oil_diag = {
-  "JezerM/oil-lsp-diagnostics.nvim",
-  dependencies = { "stevearc/oil.nvim" },
-  event = "VeryLazy",
-  opts = {},
-}
-
-return { oil, oil_diag }
