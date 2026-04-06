@@ -1,11 +1,12 @@
 local map = vim.keymap.set
-require("config.mappings.snacks")
-require("config.mappings.oil")
-require("config.mappings.tmux-nav")
+
 require("config.mappings.code-actions")
 require("config.mappings.flash")
-require("config.mappings.trouble")
+require("config.mappings.oil")
 require("config.mappings.opencode")
+require("config.mappings.snacks")
+require("config.mappings.tmux-nav")
+require("config.mappings.trouble")
 
 -- clear search highlights with <Esc>
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
