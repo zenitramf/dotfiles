@@ -13,7 +13,7 @@ set -gx VISUAL nvim
 
 set -x NVIM_APPNAME minvm
 
-# zoxide init --cmd cd fish | source
+zoxide init --cmd cd fish | source
 
 fish_add_path --move --prepend $HOME/.vite-plus/bin
 fish_add_path $HOME/.opencode/bin

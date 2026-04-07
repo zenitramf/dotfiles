@@ -11,24 +11,24 @@ require("config.mappings.trouble")
 -- clear search highlights with <Esc>
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
-map("n", ";", ":", { desc = "CMD enter command mode" })
+-- map("n", ";", ":", { desc = "CMD enter command mode" })
 
 -- Select All
 map("n", "<C-a>", "gg<S-v>G")
 
 -- Close Buffer
-map("n", "<leader>x", function()
-	local current = vim.api.nvim_get_current_buf()
-	local buffers = vim.fn.getbufinfo({ buflisted = 1 })
-
-	if #buffers > 1 then
-		vim.cmd("bnext")
-	else
-		vim.cmd("enew")
-	end
-
-	vim.cmd("bdelete " .. current)
-end, { desc = "Close Buffer" })
+-- map("n", "<leader>x", function()
+-- 	local current = vim.api.nvim_get_current_buf()
+-- 	local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+--
+-- 	if #buffers > 1 then
+-- 		vim.cmd("bnext")
+-- 	else
+-- 		vim.cmd("enew")
+-- 	end
+--
+-- 	vim.cmd("bdelete " .. current)
+-- end, { desc = "Close Buffer" })
 
 -- Save (All Modes)
 map({ "n", "i", "v" }, "<C-s>", "<cmd>w<CR>")

@@ -13,7 +13,7 @@ local servers = {
 	"vtsls",
 	"denols",
 	"unocss",
-	-- "ruff",
+	"ruff",
 	"lua_ls",
 	"stylua",
 	"tailwindcss",
@@ -234,3 +234,18 @@ vim.lsp.config("denols", {
 vim.opt.completeopt = { "menu", "menuone", "popup", "fuzzy" }
 
 vim.lsp.enable(servers)
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	callback = function(ev)
+		local client = vim.lsp.get_client_by_id(ev.data.client_id)
+		if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlineCompletion) then
+			vim.opt.completeopt = { "menu", "menuone", "noinsert", "fuzzy", "popup" }
+			vim.lsp.inline_completion.enable(true)
+			map("i", "<A-l>", function()
+				if not vim.lsp.inline_completion.get() then
+					return "<A-l>"
+				end
+			end)
+		end
+	end,
+})
