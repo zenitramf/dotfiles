@@ -18,7 +18,7 @@ Snacks.setup({
 	input = {},
 	picker = {
 		enabled = true,
-		layout = "dropdown",
+		-- layout = { preset = "sidebar", preview = "main" },
 		actions = vim.tbl_extend("force", require("trouble.sources.snacks").actions, {
 			opencode_send = function(...)
 				return require("opencode").snacks_picker_send(...)

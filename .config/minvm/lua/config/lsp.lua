@@ -26,6 +26,7 @@ local servers = {
 	"yamlls",
 	"just",
 	"pyright",
+	-- "basedpyright",
 	"mdx_analyzer",
 }
 

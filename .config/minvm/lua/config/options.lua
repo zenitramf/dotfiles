@@ -72,11 +72,11 @@ o.softtabstop = 2
 
 -- folding
 o.foldcolumn = "auto"
-o.foldlevel = 99 -- Using ufo provider need a large value
+o.foldlevel = 99
 o.foldlevelstart = 99
 o.foldenable = true
 o.foldmethod = "expr"
-o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+o.foldexpr = "v:lua.vim.lsp.foldexpr()"
 
 o.fillchars = "fold: ,foldopen:,foldsep: ,foldclose:,stl: ,eob: "
 

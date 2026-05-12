@@ -1,9 +1,12 @@
-vim.pack.add(
-	{ "https://github.com/rafamadriz/friendly-snippets", "https://github.com/saghen/blink.cmp" },
-	{ confirm = false }
-)
+vim.pack.add({
+	{ src = "https://github.com/Saghen/blink.lib" },
+	{ src = "https://github.com/Saghen/blink.cmp", version = "v1.10.2" },
+	{ src = "https://github.com/rafamadriz/friendly-snippets" },
+}, { confirm = false })
 
-require("blink.cmp").setup({
+local blink = require("blink.cmp")
+
+blink.setup({
 	signature = {
 		enabled = true,
 	},
@@ -14,10 +17,6 @@ require("blink.cmp").setup({
 		},
 		menu = {
 			auto_show = true,
-			draw = {
-				treesitter = { "lsp" },
-				columns = { { "kind_icon", "label", "label_description", gap = 1 }, { "kind" } },
-			},
 		},
 		list = {
 			selection = {
@@ -48,6 +47,6 @@ require("blink.cmp").setup({
 	},
 
 	fuzzy = {
-		implementation = "lua",
+		implementation = "prefer_rust",
 	},
 })

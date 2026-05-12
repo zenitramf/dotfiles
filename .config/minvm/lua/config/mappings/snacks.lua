@@ -68,11 +68,25 @@ map("n", "<leader>x", function()
 end, { desc = "Delete Buffer" })
 
 -- Terminal
-map({ "n", "t" }, "<leader>h", function()
+local termOpts = { start_insert = false }
+map({ "n" }, "<leader>h", function()
+	Snacks.terminal.toggle(null, termOpts)
+end, { desc = "Terminal" })
+
+map({ "t" }, "<A-j>", function()
 	Snacks.terminal.toggle(null, termOpts)
 end, { desc = "Terminal" })
 
 map("t", "<C-n>", function()
-	local opts = { start_insert = false }
 	Snacks.terminal.open(null, termOpts)
 end, { desc = "Terminal" })
+
+-- Diagnostics
+map("n", "<leader>td", function()
+	Snacks.picker.diagnostics_buffer()
+end, { desc = "View Diagnostics (Buffer)" })
+
+-- LSP References
+map("n", "grr", function()
+	Snacks.picker.lsp_references()
+end, { desc = "View LSP References" })
