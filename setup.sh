@@ -42,7 +42,9 @@ mise use --global \
     prettier@latest \
     lazygit@latest \
     just@latest \
-    fzf@latest
+    fzf@latest \
+    eza@latest
+
 
 echo "Installing vite+..."
 curl -fsSL https://vite.plus | bash
