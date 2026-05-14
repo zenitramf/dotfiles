@@ -83,12 +83,13 @@ if [ -x /usr/bin/dircolors ]; then
   alias egrep='egrep --color=auto'
 fi
 
-alias ls="li -1"
-alias lsa="llai"
+# eza aliases
+li() {
+  eza $EZA_STANDARD_OPTIONS $EZA_LI_OPTIONS $EZA_L_OPTIONS "$@"
+}
 
-function li --wraps='eza $EZA_STANDARD_OPTIONS $EZA_LI_OPTIONS $EZA_L_OPTIONS' --description 'alias li eza $EZA_STANDARD_OPTIONS $EZA_LI_OPTIONS $EZA_L_OPTIONS'
-    eza $EZA_STANDARD_OPTIONS $EZA_LI_OPTIONS $EZA_L_OPTIONS $argv
-end
+alias ls='li -1'
+alias lsa='eza -la'
 
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
