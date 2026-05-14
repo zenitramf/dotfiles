@@ -110,7 +110,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-eval "$(starship init bash)"
 
 # pnpm
 export PNPM_HOME="$HOME/.local/share/pnpm"
@@ -123,11 +122,11 @@ esac
 export PATH=/usr/local/bin:/usr/bin:/bin:$PATH
 
 PATH=$HOME/.console-ninja/.bin:$PATH
-eval "$(zoxide init bash)"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval "$(~/.local/bin/mise activate bash)"
+eval "$(zoxide init bash)"
+eval "$(starship init bash)"
+
 # Obsidian CLI
 obsidian() {
   "/mnt/c/Program Files/Obsidian/Obsidian.com" "$@"
