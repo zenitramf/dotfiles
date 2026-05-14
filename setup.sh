@@ -7,6 +7,8 @@ mkdir -p "$XDG_CONFIG_HOME"
 ln -sf "$PWD/nvim" "$XDG_CONFIG_HOME/nvim"
 ln -sf "$PWD/.bashrc" "$HOME/.bashrc"
 
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> "$HOME/.bashrc"
+
 echo "Installing apt packages..."
 sudo apt update
 
@@ -57,40 +59,38 @@ else
     echo "chsh not available; skipping default shell change."
 fi
 
-BREW="/home/linuxbrew/.linuxbrew/bin/brew"
-
-if [ ! -x "$BREW" ]; then
-    echo "Homebrew not found at $BREW"
-    echo "Install Homebrew first or update the BREW path in this script."
-    exit 1
+echo "Installing mise..."
+if ! command -v mise >/dev/null 2>&1; then
+    curl https://mise.run | sh
 fi
 
-packages=(
-    fd
-    ripgrep
-    lazygit
-    zoxide
-    python
-    go
-    oxlint
-    oxfmt
-    prettier
-    tree-sitter-cli
-)
+export PATH="$HOME/.local/bin:$PATH"
 
-for package in "${packages[@]}"; do
-    echo "Installing $package..."
-    "$BREW" install "$package"
-done
+echo "Installing tools with mise..."
+mise use --global \
+    fd@latest \
+    neovim@latest \
+    ripgrep@latest \
+    lazygit@latest \
+    starship@latest \
+    zoxide@latest \
+    python@latest \
+    go@latest \
+    uv@latest \
+    oxlint@latest \
+    oxfmt@latest \
+    prettier@latest \
+    lazygit@latest
 
 echo "Installing vite+..."
 curl -fsSL https://vite.plus | bash
 
-echo "Installing pi-coding-agent..."
+echo "Installing npm global packages..."
 if command -v npm >/dev/null 2>&1; then
+    npm install -g tree-sitter-cli
     npm install -g @earendil-works/pi-coding-agent
 else
-    echo "npm not found; skipping pi-coding-agent install."
+    echo "npm not found; skipping npm global packages."
 fi
 
 echo "All packages from the setup script have been installed."
