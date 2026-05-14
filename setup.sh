@@ -7,8 +7,6 @@ mkdir -p "$XDG_CONFIG_HOME"
 ln -sf "$PWD/minvm" "$XDG_CONFIG_HOME/nvim"
 ln -sf "$PWD/.bashrc" "$HOME/.bashrc"
 
-echo 'eval "$(~/.local/bin/mise activate bash)"' >> "$HOME/.bashrc"
-
 echo "Installing apt packages..."
 sudo apt update
 
@@ -25,6 +23,17 @@ if ! command -v mise >/dev/null 2>&1; then
 fi
 
 export PATH="$HOME/.local/bin:$PATH"
+
+echo "Installing vite+..."
+curl -fsSL https://vite.plus | bash
+
+echo "Installing npm global packages..."
+if command -v npm >/dev/null 2>&1; then
+    npm install -g tree-sitter-cli
+    npm install -g @earendil-works/pi-coding-agent
+else
+    echo "npm not found; skipping npm global packages."
+fi
 
 echo "Installing tools with mise..."
 mise use --global \
@@ -44,17 +53,5 @@ mise use --global \
     just@latest \
     fzf@latest \
     eza@latest
-
-
-echo "Installing vite+..."
-curl -fsSL https://vite.plus | bash
-
-echo "Installing npm global packages..."
-if command -v npm >/dev/null 2>&1; then
-    npm install -g tree-sitter-cli
-    npm install -g @earendil-works/pi-coding-agent
-else
-    echo "npm not found; skipping npm global packages."
-fi
 
 echo "All packages from the setup script have been installed."
