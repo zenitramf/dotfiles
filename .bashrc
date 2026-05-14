@@ -110,9 +110,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export PATH="$HOME/.local/bin:$PATH"
-. "$HOME/.cargo/env"
-
 eval "$(starship init bash)"
 
 # pnpm
