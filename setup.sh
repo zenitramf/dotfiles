@@ -51,6 +51,7 @@ mise use --global \
     lazygit@latest \
     just@latest \
     fzf@latest \
-    eza@latest
+    eza@latest \
+    infisical@latest
 
 echo "All packages from the setup script have been installed."
