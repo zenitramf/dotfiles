@@ -55,3 +55,6 @@ mise use --global \
     infisical@latest
 
 echo "All packages from the setup script have been installed."
+
+git config --global user.name "zenitramf"
+git config --global user.email "francisco@zenitram.dev"
