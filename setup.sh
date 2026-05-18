@@ -7,6 +7,9 @@ mkdir -p "$XDG_CONFIG_HOME"
 ln -sf "$PWD/.config/minvm" "$XDG_CONFIG_HOME/nvim"
 ln -sf "$PWD/.bashrc" "$HOME/.bashrc"
 
+git clone https://github.com/tmuxpack/tpack ~/.tmux/plugins/tpm
+ln -sf "$PWD/.config/tmux" "$XDG_CONFIG_HOME/tmux"
+
 echo "Installing apt packages..."
 sudo apt update
 
