@@ -52,7 +52,8 @@ mise use --global \
     just@latest \
     fzf@latest \
     eza@latest \
-    infisical@latest
+    infisical@latest \
+    tmux@latest
 
 echo "All packages from the setup script have been installed."
 
