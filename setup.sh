@@ -4,7 +4,7 @@ set -euo pipefail
 export XDG_CONFIG_HOME="$HOME/.config"
 mkdir -p "$XDG_CONFIG_HOME"
 
-ln -sf "$PWD/minvm" "$XDG_CONFIG_HOME/nvim"
+ln -sf "$PWD/.config/minvm" "$XDG_CONFIG_HOME/nvim"
 ln -sf "$PWD/.bashrc" "$HOME/.bashrc"
 
 echo "Installing apt packages..."
@@ -43,7 +43,6 @@ mise use --global \
     lazygit@latest \
     starship@latest \
     zoxide@latest \
-    python@latest \
     go@latest \
     uv@latest \
     oxlint@latest \
