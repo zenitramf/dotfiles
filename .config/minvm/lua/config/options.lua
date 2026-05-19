@@ -7,7 +7,7 @@ g.mapleader = " "
 g.maplocalleader = " "
 
 -- enable true color support
-o.termguicolors = true
+-- o.termguicolors = true
 
 -- make line numbers default
 o.number = true
@@ -19,9 +19,23 @@ o.mouse = "a"
 -- don't show the mode, since it's already in the status line
 o.showmode = false
 
--- sync clipboard between OS and Neovim.
---  remove this option if you want your OS clipboard to remain independent.
---  see `:help 'clipboard'`
+-- sync clipboard over SSH using OSC52
+vim.g.clipboard = {
+	name = "OSC 52",
+	copy = {
+		["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+		["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+	},
+	paste = {
+		["+"] = function()
+			return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+		end,
+		["*"] = function()
+			return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
+		end,
+	},
+}
+
 o.clipboard = "unnamedplus"
 
 -- save undo history

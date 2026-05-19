@@ -15,7 +15,7 @@ require("conform").setup({
 	},
 	formatters_by_ft = {
 		lua = { "stylua" },
-		javascript = { "oxlint_fix", "oxfmt", "prettier" },
+		javascript = { "oxlint_fix", "oxfmt" },
 		javascriptreact = { "oxlint_fix", "oxfmt" },
 		["javascript.jsx"] = { "oxlint_fix", "oxfmt" },
 		typescript = { "oxlint_fix", "oxfmt" },
