@@ -132,6 +132,7 @@ export PATH=/usr/local/bin:/usr/bin:/bin:$PATH
 PATH=$HOME/.console-ninja/.bin:$PATH
 
 eval "$(~/.local/bin/mise activate bash)"
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
 eval "$(zoxide init bash)"
 eval "$(starship init bash)"
 
@@ -140,3 +141,6 @@ obsidian() {
   "/mnt/c/Program Files/Obsidian/Obsidian.com" "$@"
 }
 
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"

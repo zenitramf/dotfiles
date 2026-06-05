@@ -142,3 +142,12 @@ if [ -f '/home/swimlane/google-cloud-sdk/path.zsh.inc' ]; then . '/home/swimlane
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/swimlane/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/swimlane/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Auto-Warpify
+[[ "$-" == *i* ]] && printf 'P$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh", "uname": "Linux" }}\' 
+
+# Load sensitive local Zsh settings if present
+[[ -f "$HOME/.zshrc_sensitive" ]] && source "$HOME/.zshrc_sensitive"
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"
