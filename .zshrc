@@ -15,25 +15,6 @@ path=(
   $path
 )
 
-# Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-
-plugins=(
-  git
-  httpie
-  gh
-  aws
-  ssh
-  systemd
-  ubuntu
-  history
-  fzf
-  eza
-  zsh-syntax-highlighting
-)
-
-source $ZSH/oh-my-zsh.sh
-
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
 	yazi "$@" --cwd-file="$tmp"
