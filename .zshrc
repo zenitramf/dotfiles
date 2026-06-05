@@ -56,7 +56,7 @@ xdg-open() {
 }
 
 eval "$(starship init zsh)"
-export NVIM_APPNAME=chad
+export NVIM_APPNAME=minvm
 
 # --- Yazi Setup --- #
 export EDITOR="nvim"
