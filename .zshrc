@@ -130,5 +130,11 @@ if [ -f '/home/swimlane/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/sw
 # Load sensitive local Zsh settings if present
 [[ -f "$HOME/.zshrc_sensitive" ]] && source "$HOME/.zshrc_sensitive"
 
+alias k=kubectl
+
+# ---- K9s Configuration ----
+export K9S_SKIN=kanagawa
+
+
 # Vite+ bin (https://viteplus.dev)
 . "$HOME/.vite-plus/env"
