@@ -144,3 +144,5 @@ obsidian() {
 
 # Vite+ bin (https://viteplus.dev)
 . "$HOME/.vite-plus/env"
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init bash)"; fi
