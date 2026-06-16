@@ -73,6 +73,7 @@ curl -fsSL https://vite.plus | bash
 echo "Installing npm global packages..."
 if command -v npm >/dev/null 2>&1; then
     npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+    pi install npm:pi-mcp-extension
 else
     echo "npm not found; skipping npm global packages."
 fi
