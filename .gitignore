@@ -8,3 +8,11 @@ go/
 .config/freerdp/known_hosts2
 .config/wslu/triggered_time
 /.config/github-copilot
+/.pi/agent/tmp/extensions
+/.pi/agent/trust.json
+*auth.json
+/.pi/agent/sessions
+/.pi/agent/npm
+/.pi/agent/mcp-auth
+/.pi/agent/git
+/.pi/pi-acp

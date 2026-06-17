@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "toolPrefix": "mcp",
+    "maxRetries": 3
+  },
+  "mcpServers": {
+    "clickup": {
+      "transport": "streamable-http",
+      "url": "https://mcp.clickup.com/mcp",
+      "lifecycle": "lazy",
+      "auth": {
+        "type": "oauth"
+      }
+    }
+  }
+}

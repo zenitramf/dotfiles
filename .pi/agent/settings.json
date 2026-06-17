@@ -1,0 +1,10 @@
+{
+  "lastChangelogVersion": "0.79.6",
+  "defaultProvider": "openai",
+  "defaultModel": "gpt-5.5",
+  "defaultThinkingLevel": "low",
+  "theme": "dark",
+  "packages": [
+    "npm:pi-mcp-extension"
+  ]
+}
