@@ -5,6 +5,8 @@
   "defaultThinkingLevel": "low",
   "theme": "dark",
   "packages": [
-    "npm:pi-mcp-extension"
+    "npm:pi-mcp-extension",
+    "npm:@ogulcancelik/pi-herdr"
   ]
 }
+
