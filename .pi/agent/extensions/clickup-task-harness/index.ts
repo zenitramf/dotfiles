@@ -1,5 +1,8 @@
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { execFile } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { Type } from "typebox";
 
 type AgentKind = "orchestrator" | "worker1" | "worker2" | "worker3" | "reviewer1" | "reviewer2" | "reviewer3";
@@ -57,31 +60,86 @@ type TerminalBootstrap = HerdrContext & {
   agents: Record<Exclude<AgentKind, "orchestrator">, TerminalAgentInfo>;
 };
 
-const WIDGET_ID = "clickup-task-harness";
+type AgentConfig = {
+  name: string;
+  description: string;
+  tools?: string;
+  model: string;
+  thinking: string;
+  prompt: string;
+};
 
-const defaults = (): HarnessState => ({
-  enabled: false,
-  mcpStatus: "unknown",
-  herdrStatus: "unknown",
-  mcpToolsEnabled: [],
-  cards: {
-    orchestrator: {
-      name: "Orchestrator",
-      status: "idle",
-      model: "GPT-5.5 · high reasoning",
-      details: ["Awaiting /clickup-harness <ClickUp task id or URL>"],
+type AgentType = "orchestrator" | "worker" | "reviewer";
+
+const WIDGET_ID = "clickup-task-harness";
+const EXTENSION_DIR = dirname(fileURLToPath(import.meta.url));
+const agentConfigFiles: Record<AgentType, string> = {
+  orchestrator: "orchestrator.md",
+  worker: "worker.md",
+  reviewer: "reviewer.md",
+};
+
+const defaults = (): HarnessState => {
+  const orchestrator = agentConfig("orchestrator");
+  const worker = agentConfig("worker");
+  const reviewer = agentConfig("reviewer");
+  return {
+    enabled: false,
+    mcpStatus: "unknown",
+    herdrStatus: "unknown",
+    mcpToolsEnabled: [],
+    cards: {
+      orchestrator: {
+        name: "Orchestrator",
+        status: "idle",
+        model: displayModel(orchestrator),
+        details: ["Awaiting /clickup-harness <ClickUp task id or URL>"],
+      },
+      worker1: { name: "Worker 1", status: "idle", model: displayModel(worker), details: ["No subtask assigned"] },
+      worker2: { name: "Worker 2", status: "idle", model: displayModel(worker), details: ["No subtask assigned"] },
+      worker3: { name: "Worker 3", status: "idle", model: displayModel(worker), details: ["No subtask assigned"] },
+      reviewer1: { name: "Reviewer 1", status: "idle", model: displayModel(reviewer), details: ["Waiting for worker completion"] },
+      reviewer2: { name: "Reviewer 2", status: "idle", model: displayModel(reviewer), details: ["Waiting for worker completion"] },
+      reviewer3: { name: "Reviewer 3", status: "idle", model: displayModel(reviewer), details: ["Waiting for worker completion"] },
     },
-    worker1: { name: "Worker 1", status: "idle", model: "openai · gpt-5.3-codex · medium thinking", details: ["No subtask assigned"] },
-    worker2: { name: "Worker 2", status: "idle", model: "openai · gpt-5.3-codex · medium thinking", details: ["No subtask assigned"] },
-    worker3: { name: "Worker 3", status: "idle", model: "openai · gpt-5.3-codex · medium thinking", details: ["No subtask assigned"] },
-    reviewer1: { name: "Reviewer 1", status: "idle", model: "openai · gpt-5.5 · high thinking", details: ["Waiting for worker completion"] },
-    reviewer2: { name: "Reviewer 2", status: "idle", model: "openai · gpt-5.5 · high thinking", details: ["Waiting for worker completion"] },
-    reviewer3: { name: "Reviewer 3", status: "idle", model: "openai · gpt-5.5 · high thinking", details: ["Waiting for worker completion"] },
-  },
-});
+  };
+};
 
 let state: HarnessState = defaults();
 let terminalBootstrap: TerminalBootstrap | undefined;
+
+function parseAgentConfig(type: AgentType): AgentConfig {
+  const path = join(EXTENSION_DIR, agentConfigFiles[type]);
+  const raw = readFileSync(path, "utf8");
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  if (!match) throw new Error(`Invalid agent config ${path}: missing YAML frontmatter`);
+  const frontmatter = match[1];
+  const prompt = match[2].trim();
+  const fields: Record<string, string> = {};
+  for (const line of frontmatter.split(/\r?\n/)) {
+    const parsed = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (parsed) fields[parsed[1]] = parsed[2].trim().replace(/^['"]|['"]$/g, "");
+  }
+  for (const required of ["name", "description", "model", "thinking"] as const) {
+    if (!fields[required]) throw new Error(`Invalid agent config ${path}: missing ${required}`);
+  }
+  return {
+    name: fields.name,
+    description: fields.description,
+    tools: fields.tools,
+    model: fields.model,
+    thinking: fields.thinking,
+    prompt,
+  };
+}
+
+function agentConfig(type: AgentType): AgentConfig {
+  return parseAgentConfig(type);
+}
+
+function displayModel(config: AgentConfig): string {
+  return `${config.model} · ${config.thinking} thinking`;
+}
 
 const workerKinds = ["worker1", "worker2", "worker3"] as const;
 const reviewerKinds = ["reviewer1", "reviewer2", "reviewer3"] as const;
@@ -409,9 +467,41 @@ function formatTerminalRoster(bootstrap: TerminalBootstrap): string {
 }
 
 function buildKickoff(taskId: string, bootstrap: TerminalBootstrap) {
+  const orchestrator = agentConfig("orchestrator");
+  const worker = agentConfig("worker");
+  const reviewer = agentConfig("reviewer");
   return `Run Clickup Task Harness for ${taskId}.
 
-You are the Orchestrator for the Clickup Task Harness extension. Follow this exact operating plan:
+The agent configurations below were loaded from orchestrator.md, worker.md, and reviewer.md in the extension directory. Treat these markdown files as the primary source for each agent type's role, model, thinking level, tool policy, and base instructions.
+
+## Orchestrator configuration (${agentConfigFiles.orchestrator})
+- name: ${orchestrator.name}
+- description: ${orchestrator.description}
+- model: ${orchestrator.model}
+- thinking: ${orchestrator.thinking}
+- tools: ${orchestrator.tools ?? "default"}
+
+${orchestrator.prompt}
+
+## Worker configuration (${agentConfigFiles.worker})
+- name: ${worker.name}
+- description: ${worker.description}
+- model: ${worker.model}
+- thinking: ${worker.thinking}
+- tools: ${worker.tools ?? "default"}
+
+${worker.prompt}
+
+## Reviewer configuration (${agentConfigFiles.reviewer})
+- name: ${reviewer.name}
+- description: ${reviewer.description}
+- model: ${reviewer.model}
+- thinking: ${reviewer.thinking}
+- tools: ${reviewer.tools ?? "default"}
+
+${reviewer.prompt}
+
+Follow this exact operating plan:
 
 The extension has already prestarted all worker and reviewer subagents as terminal-only shell panes. These panes are ready in-terminal, but no subagent pi process has been started yet. The workers tab and reviewer tab must each contain exactly 3 panes total: one pane per slot, with no extra original/unassigned pane.
 
@@ -426,7 +516,7 @@ Critical startup invariant: until the user selects work and you are ready to exe
 
 1. Use the @ogulcancelik/pi-herdr extension for every herdr-related action (detecting/inspecting tabs/panes, creating tabs, spawning panes, running commands in panes, and cleanup). Do not bypass it with ad-hoc terminal/tmux/herdr automation. For all subagents, do not create separate herdr workspaces; use tabs/panes in the current workspace instead. Treat all worker/reviewer agents as idempotent: use stable labels, inspect before spawning, reuse existing matching panes, and avoid duplicating side effects on rerun.
 2. Verify you are inside a herdr instance using the deterministic environment check: HERDR_ENV must equal "1". If not, stop and tell the user the harness must run inside herdr.
-3. The extension intentionally did not check ClickUp MCP readiness in the orchestrator pane. In the orchestrator pane, do not run /mcp, do not run /mcp:start clickup, and do not run /mcp:list just to inspect status. Proceed using the available ClickUp MCP tools; if no mcp_clickup_* tools are callable when you need task data, report that as blocked and ask the user to start/fix ClickUp MCP. Worker and reviewer panes are terminal-only shells at this point. When a selected work batch is ready to execute, use wt commands in the appropriate prestarted worker terminal panes to switch workers to their assigned worktrees, then start pi in those worker panes, then run /mcp:start clickup in each started worker pi agent before sending any worker prompt. Reviewers are started only after workers finish; start reviewer pi with only read-only tools enabled and do not start ClickUp MCP in reviewer panes.
+3. The extension intentionally did not check ClickUp MCP readiness in the orchestrator pane. In the orchestrator pane, do not run MCP slash commands just to inspect status. Proceed using the available ClickUp MCP tools; if no mcp_clickup_* tools are callable when you need task data, report that as blocked and ask the user to fix ClickUp MCP access. Worker and reviewer panes are terminal-only shells at this point. When a selected work batch is ready to execute, use wt commands in the appropriate prestarted worker terminal panes to switch workers to their assigned worktrees, then start pi in those worker panes with ClickUp MCP tools available. Reviewers are started only after workers finish; start reviewer pi with only read-only built-in tools enabled and no ClickUp MCP access.
 4. Use the ClickUp MCP tools to retrieve the primary task and all subtasks for: ${taskId}
 5. Return a markdown table of all available subtasks with columns: Rank, ClickUp ID, Title, Status, Assignee, Priority, Blockers/Dependencies, Rationale.
 6. Recommend which subtasks you would run first and explain the ranking briefly, but do not choose for the user.
@@ -448,20 +538,19 @@ Agent wait protocol: every time you wait for a worker or reviewer response, use 
    - If and only if that fails because the branch does not exist, create it from the current worktree from the orchestrator pane: wt -C <repo-root> switch --create <branch> --base @ --format json --no-cd -y
    - Parse the worktree path from the first JSON line's path field. Store both the branch and worktree path for that worker slot and for reviewer startup.
    - Write/update the worker prompt to /tmp/clickup-harness-<worker-slot>-<ClickUp Subtask ID>.md before starting pi. The prompt must be idempotent and include the mandatory ClickUp MCP status protocol below.
-   - In the assigned prestarted worker terminal pane, use wt to switch to the worktree and then execute pi in that worktree; do not use cd: herdr pane run <worker-pane-id> "wt -C <repo-root> switch <branch> -y --execute pi -- --provider openai --model gpt-5.3-codex --thinking medium --name \"<worker-slot> - ${bootstrap.taskSlug} - Worker\""
-   - After pi is ready in that pane, start ClickUp MCP with exactly: herdr pane run <worker-pane-id> /mcp:start clickup
-   - Do not send the worker prompt until after the ClickUp MCP start command has completed in that worker pane. If ClickUp MCP fails to start or the worker reports that no mcp_clickup_* tools are available, update that worker card as blocked and ask the user for the fix instead of letting the worker continue.
-   - Send the worker prompt only after ClickUp MCP is started by running: herdr pane run <worker-pane-id> @/tmp/clickup-harness-<worker-slot>-<ClickUp Subtask ID>.md
+   - In the assigned prestarted worker terminal pane, use wt to switch to the worktree and then execute pi in that worktree with ClickUp MCP tools enabled; do not use cd: herdr pane run <worker-pane-id> "wt -C <repo-root> switch <branch> -y --execute pi -- --model ${worker.model} --thinking ${worker.thinking} --tools read,grep,find,ls,bash,edit,write,mcp_clickup_* --name \"<worker-slot> - ${bootstrap.taskSlug} - Worker\""
+   - If the worker reports that no mcp_clickup_* tools are available, update that worker card as blocked and ask the user for the fix instead of letting the worker continue.
+   - Send the worker prompt after pi is ready by running: herdr pane run <worker-pane-id> @/tmp/clickup-harness-<worker-slot>-<ClickUp Subtask ID>.md
    - After all worker prompts for the current batch have been sent, wait for worker responses deterministically in slot order with wait_agent and timeout 1800000 ms per active worker. Do not rely on sleeps or repeated pane reads. For each worker, update the UI card immediately after wait_agent returns done/blocked/timed out.
    - If the pane is already running pi for the same subtask and has already reported final results, do not resend the prompt; only collect status. If it is running pi for a different subtask, update the card as blocked and ask the user for cleanup instead of reusing it.
-   - The worker prompt must include this mandatory ClickUp MCP status protocol: fetch the assigned subtask through ClickUp MCP; before editing files, use ClickUp MCP to update that exact subtask, not the parent task, to the workspace's in-progress/working status; if the in-progress status update fails, stop and report blocked without implementing; when implementation and self-tests are complete, use ClickUp MCP to update that same subtask to the workspace's done/complete/closed status; never use shell/curl/browser/manual ClickUp updates for statuses and never ask the orchestrator to update the worker's subtask status; include previous status, final status, and status-update evidence in the final report.
-   - Worker instructions: fetch its subtask from ClickUp MCP; follow the mandatory ClickUp MCP status protocol above; complete the implementation; comment relevant results on the subtask without duplicating prior harness comments if rerun; report status, results, token usage, cost, and model back to you. Workers must use provider openai, model gpt-5.3-codex, and medium thinking.
+   - The worker prompt must include this mandatory ClickUp MCP status protocol: fetch the assigned subtask through ClickUp MCP tools; before editing files, use ClickUp MCP tools to update that exact subtask, not the parent task, to the workspace's in-progress/working status; if the in-progress status update fails, stop and report blocked without implementing; when implementation and self-tests are complete, use ClickUp MCP tools to update that same subtask to the workspace's done/complete/closed status; never use shell/curl/browser/manual ClickUp updates or MCP slash commands for statuses and never ask the orchestrator to update the worker's subtask status; include previous status, final status, and status-update evidence in the final report.
+   - Worker instructions: use the loaded worker.md configuration as the base prompt; fetch its subtask from ClickUp MCP; follow the mandatory ClickUp MCP status protocol above; complete the implementation; comment relevant results on the subtask without duplicating prior harness comments if rerun; report status, results, token usage, cost, and model back to you. Workers must use model ${worker.model} and ${worker.thinking} thinking.
 12. After workers finish, use the matching prestarted reviewer terminal panes. Do not create reviewer panes during normal startup:
    - Start reviewer1 in worker1's stored branch/worktree, reviewer2 in worker2's stored branch/worktree, and reviewer3 in worker3's stored branch/worktree. If a worker slot did not run in this batch, leave the matching reviewer terminal idle.
    - Write/update the reviewer prompt to /tmp/clickup-harness-<reviewer-slot>-${bootstrap.taskSlug}.md before starting pi. The reviewer prompt must be idempotent and must include all task context the reviewer needs, including the assigned ClickUp subtask context, worker final report, branch/worktree path, acceptance criteria when available, and the relevant git diff/stat collected by the orchestrator.
    - The reviewer prompt must explicitly state that the reviewer is read-only: it must not modify code or any repository files, must not create/delete/rename files, must not apply patches, must not run formatting/fix commands, must not update ClickUp statuses, must not create/update ClickUp comments, and must report findings only back to the orchestrator.
-   - In the assigned prestarted reviewer terminal pane, use wt to switch to the worker worktree and then execute pi in that worktree with only read-only built-in tools enabled; do not use cd: herdr pane run <reviewer-pane-id> "wt -C <repo-root> switch <worker-branch> -y --execute pi -- --provider openai --model gpt-5.5 --thinking high --tools read,grep,find,ls --name \"<reviewer-slot> - ${bootstrap.taskSlug} - Reviewer\""
-   - Do not start ClickUp MCP in reviewer panes. Reviewers must not use ClickUp tools or any extension tools; if they need missing task context, they must ask the orchestrator for it in their final report instead of querying or updating ClickUp.
+   - In the assigned prestarted reviewer terminal pane, use wt to switch to the worker worktree and then execute pi in that worktree with only read-only built-in tools enabled; do not use cd: herdr pane run <reviewer-pane-id> "wt -C <repo-root> switch <worker-branch> -y --execute pi -- --model ${reviewer.model} --thinking ${reviewer.thinking} --tools read,grep,find,ls --name \"<reviewer-slot> - ${bootstrap.taskSlug} - Reviewer\""
+   - Do not give reviewers ClickUp MCP access. Reviewers MUST NOT access ClickUp and must not use ClickUp tools or any extension tools; if they need missing task context, they must ask the orchestrator for it in their final report instead of querying or updating ClickUp.
    - Send the reviewer prompt after pi is ready by running: herdr pane run <reviewer-pane-id> @/tmp/clickup-harness-<reviewer-slot>-${bootstrap.taskSlug}.md
    - After all reviewer prompts for the current batch have been sent, wait for reviewer responses deterministically in slot order with wait_agent and timeout 1800000 ms per active reviewer. Do not rely on sleeps or repeated pane reads. For each reviewer, update the UI card immediately after wait_agent returns done/blocked/timed out.
    - Each reviewer performs only read-only code review of the assigned worker worktree based on the prompt, worker reports, and code changes. Its sole output is a report to the orchestrator with findings, evidence, severity, and recommended next steps.
@@ -522,7 +611,7 @@ export default function (pi: ExtensionAPI) {
         state.cards.orchestrator.status = "retrieving subtasks";
         state.cards.orchestrator.details = [
           `Prestarted worker/reviewer terminal panes in ${herdrContext.workspaceId}`,
-          "Skipped orchestrator ClickUp MCP readiness check; did not run /mcp or /mcp:start clickup",
+          "Skipped orchestrator ClickUp MCP readiness check; no MCP slash commands were run",
           tools.length > 0 ? `Enabled ${tools.length} mcp_clickup_* tools opportunistically` : "No mcp_clickup_* tools visible yet; orchestrator should report blocked if ClickUp tools are unavailable",
         ];
         refresh(ctx);
