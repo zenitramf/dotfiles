@@ -16,3 +16,5 @@ go/
 /.pi/agent/mcp-auth
 /.pi/agent/git
 /.pi/pi-acp
+/.pi/agent/mcp-cache.json
+/.pi/agent/mcp-oauth
