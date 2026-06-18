@@ -5,12 +5,14 @@
   },
   "mcpServers": {
     "clickup": {
-      "transport": "streamable-http",
       "url": "https://mcp.clickup.com/mcp",
       "lifecycle": "lazy",
-      "auth": {
-        "type": "oauth"
-      }
+      "auth": "oauth"
+    },
+    "sentry": {
+      "url": "https://mcp.sentry.dev/mcp",
+      "lifecycle": "lazy",
+      "auth": "oauth"
     }
   }
 }

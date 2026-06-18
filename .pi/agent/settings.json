@@ -2,10 +2,10 @@
   "lastChangelogVersion": "0.79.6",
   "defaultProvider": "openai",
   "defaultModel": "gpt-5.5",
-  "defaultThinkingLevel": "high",
+  "defaultThinkingLevel": "low",
   "theme": "dark",
   "packages": [
-    "npm:pi-mcp-extension",
-    "npm:@ogulcancelik/pi-herdr"
+    "npm:@ogulcancelik/pi-herdr",
+    "npm:pi-mcp-adapter"
   ]
 }
