@@ -399,19 +399,6 @@ async function bootstrapTerminalAgents(ctx: ExtensionContext, taskId: string, he
   return { ...herdrContext, taskSlug, workersTabId, reviewerTabId, agents };
 }
 
-async function checkClickUpMcpReadyBeforeTurn(herdrContext?: HerdrContext): Promise<HerdrContext> {
-  const context = herdrContext ?? (await getCurrentHerdrContext());
-  await execHerdr(["pane", "run", context.paneId, "/mcp"], 10000);
-  const output = await execHerdr(["pane", "read", context.paneId, "--source", "recent-unwrapped", "--lines", "120", "--format", "text"], 5000);
-  const clickUpReadyLine = output
-    .split(/\r?\n/)
-    .find((line) => /^\s*(?:[✓✔]\s*)?clickup\s*\(ready\)\s*$/i.test(line.trim()));
-  if (!clickUpReadyLine) {
-    throw new Error("ClickUp MCP is not ready according to /mcp output; expected a line like: ✓ clickup (ready)");
-  }
-  return context;
-}
-
 function formatTerminalRoster(bootstrap: TerminalBootstrap): string {
   return subagentKinds
     .map((kind) => {
@@ -439,13 +426,16 @@ Critical startup invariant: until the user selects work and you are ready to exe
 
 1. Use the @ogulcancelik/pi-herdr extension for every herdr-related action (detecting/inspecting tabs/panes, creating tabs, spawning panes, running commands in panes, and cleanup). Do not bypass it with ad-hoc terminal/tmux/herdr automation. For all subagents, do not create separate herdr workspaces; use tabs/panes in the current workspace instead. Treat all worker/reviewer agents as idempotent: use stable labels, inspect before spawning, reuse existing matching panes, and avoid duplicating side effects on rerun.
 2. Verify you are inside a herdr instance using the deterministic environment check: HERDR_ENV must equal "1". If not, stop and tell the user the harness must run inside herdr.
-3. The extension already ran plain /mcp in the orchestrator pane before this conversation turn and verified clickup is ready. In the orchestrator pane, do not run /mcp:start clickup and do not run /mcp:list. Worker and reviewer panes are terminal-only shells at this point. When a selected work batch is ready to execute, use wt commands in the appropriate prestarted terminal panes to switch them to their assigned worktrees, then start pi in those panes, then run /mcp:start clickup in each started pi agent before sending any worker/reviewer prompt.
-4. Use the ClickUp MCP to retrieve the primary task and all subtasks for: ${taskId}
+3. The extension intentionally did not check ClickUp MCP readiness in the orchestrator pane. In the orchestrator pane, do not run /mcp, do not run /mcp:start clickup, and do not run /mcp:list just to inspect status. Proceed using the available ClickUp MCP tools; if no mcp_clickup_* tools are callable when you need task data, report that as blocked and ask the user to start/fix ClickUp MCP. Worker and reviewer panes are terminal-only shells at this point. When a selected work batch is ready to execute, use wt commands in the appropriate prestarted worker terminal panes to switch workers to their assigned worktrees, then start pi in those worker panes, then run /mcp:start clickup in each started worker pi agent before sending any worker prompt. Reviewers are started only after workers finish; start reviewer pi with only read-only tools enabled and do not start ClickUp MCP in reviewer panes.
+4. Use the ClickUp MCP tools to retrieve the primary task and all subtasks for: ${taskId}
 5. Return a markdown table of all available subtasks with columns: Rank, ClickUp ID, Title, Status, Assignee, Priority, Blockers/Dependencies, Rationale.
 6. Recommend which subtasks you would run first and explain the ranking briefly, but do not choose for the user.
 7. STOP and WAIT for the user's explicit selection of which subtasks to run. The user may choose any listed subtasks, not necessarily your recommendations. Do not assign workers, create worktrees, start pi in worker/reviewer terminals, send prompts to subagents, or change ClickUp subtask statuses until the user lists the subtasks they want run.
 8. After the user selects subtasks, use the clickup_task_harness_update_agent tool to keep the seven UI cards current. Assign worker1/worker2/worker3 only to the user-selected subtasks, up to three workers at a time. If the user selects more than three, run them in batches and wait for each batch to complete before assigning the next. The card tool updates only the local harness UI; it does not update ClickUp and must never be treated as a substitute for worker ClickUp MCP status updates.
 9. Fast-start rule: do not discover command syntax at runtime. Do not run wt -h, wt --help, wt list, herdr -h, herdr --help, herdr <subcommand> --help, herdr workspace list, herdr pane list, or herdr agent list during worker/reviewer startup. Use only the command recipes below. If one of these commands fails, update the UI card and ask the user instead of trying help/list variants.
+
+Agent wait protocol: every time you wait for a worker or reviewer response, use the @ogulcancelik/pi-herdr wait_agent operation, not ad-hoc sleeps, manual polling, repeated pane reads, or user-visible guessing. Use a deterministic 30 minute timeout: 1800000 ms. Wait in stable slot order (worker1, worker2, worker3; then reviewer1, reviewer2, reviewer3), and record whether each wait completed, blocked, or timed out. If the pi-herdr wait_agent operation is unavailable but the herdr CLI is available, use the deterministic equivalent: herdr wait agent-status <pane-id> --status done --timeout 1800000. If that times out, read that pane once with recent-unwrapped output for diagnosis, update the UI card as blocked/timed out, and ask the user how to proceed. Do not try help/list discovery variants.
+
 10. Prestarted terminal pane rules for the current batch:
    - Prefer the exact pane ids from the prestarted terminal roster above. Do not spawn duplicate worker/reviewer panes during normal startup. Keep the workers tab at exactly 3 panes and the reviewer tab at exactly 3 panes.
    - The worker pane mapping is fixed: worker1 -> ${bootstrap.agents.worker1.paneId}, worker2 -> ${bootstrap.agents.worker2.paneId}, worker3 -> ${bootstrap.agents.worker3.paneId}.
@@ -462,17 +452,20 @@ Critical startup invariant: until the user selects work and you are ready to exe
    - After pi is ready in that pane, start ClickUp MCP with exactly: herdr pane run <worker-pane-id> /mcp:start clickup
    - Do not send the worker prompt until after the ClickUp MCP start command has completed in that worker pane. If ClickUp MCP fails to start or the worker reports that no mcp_clickup_* tools are available, update that worker card as blocked and ask the user for the fix instead of letting the worker continue.
    - Send the worker prompt only after ClickUp MCP is started by running: herdr pane run <worker-pane-id> @/tmp/clickup-harness-<worker-slot>-<ClickUp Subtask ID>.md
+   - After all worker prompts for the current batch have been sent, wait for worker responses deterministically in slot order with wait_agent and timeout 1800000 ms per active worker. Do not rely on sleeps or repeated pane reads. For each worker, update the UI card immediately after wait_agent returns done/blocked/timed out.
    - If the pane is already running pi for the same subtask and has already reported final results, do not resend the prompt; only collect status. If it is running pi for a different subtask, update the card as blocked and ask the user for cleanup instead of reusing it.
    - The worker prompt must include this mandatory ClickUp MCP status protocol: fetch the assigned subtask through ClickUp MCP; before editing files, use ClickUp MCP to update that exact subtask, not the parent task, to the workspace's in-progress/working status; if the in-progress status update fails, stop and report blocked without implementing; when implementation and self-tests are complete, use ClickUp MCP to update that same subtask to the workspace's done/complete/closed status; never use shell/curl/browser/manual ClickUp updates for statuses and never ask the orchestrator to update the worker's subtask status; include previous status, final status, and status-update evidence in the final report.
    - Worker instructions: fetch its subtask from ClickUp MCP; follow the mandatory ClickUp MCP status protocol above; complete the implementation; comment relevant results on the subtask without duplicating prior harness comments if rerun; report status, results, token usage, cost, and model back to you. Workers must use provider openai, model gpt-5.3-codex, and medium thinking.
 12. After workers finish, use the matching prestarted reviewer terminal panes. Do not create reviewer panes during normal startup:
    - Start reviewer1 in worker1's stored branch/worktree, reviewer2 in worker2's stored branch/worktree, and reviewer3 in worker3's stored branch/worktree. If a worker slot did not run in this batch, leave the matching reviewer terminal idle.
-   - Write/update the reviewer prompt to /tmp/clickup-harness-<reviewer-slot>-${bootstrap.taskSlug}.md before starting pi. The reviewer prompt must be idempotent.
-   - In the assigned prestarted reviewer terminal pane, use wt to switch to the worker worktree and then execute pi in that worktree; do not use cd: herdr pane run <reviewer-pane-id> "wt -C <repo-root> switch <worker-branch> -y --execute pi -- --provider openai --model gpt-5.5 --thinking high --name \"<reviewer-slot> - ${bootstrap.taskSlug} - Reviewer\""
-   - After pi is ready in that pane, start ClickUp MCP with exactly: herdr pane run <reviewer-pane-id> /mcp:start clickup
-   - Send the reviewer prompt only after ClickUp MCP is started by running: herdr pane run <reviewer-pane-id> @/tmp/clickup-harness-<reviewer-slot>-${bootstrap.taskSlug}.md
-   - Each reviewer performs read-only code review; checks the assigned worker worktree; reviews based on worker reports and code changes; may use ClickUp MCP only for read-only task context; and must not update ClickUp statuses/comments unless you explicitly instruct it later.
-13. Collect reviewer1/reviewer2/reviewer3 results, reconcile disagreements, and report consolidated review results plus recommended next steps to the user. Do not merge or remove worktrees until the user approves.
+   - Write/update the reviewer prompt to /tmp/clickup-harness-<reviewer-slot>-${bootstrap.taskSlug}.md before starting pi. The reviewer prompt must be idempotent and must include all task context the reviewer needs, including the assigned ClickUp subtask context, worker final report, branch/worktree path, acceptance criteria when available, and the relevant git diff/stat collected by the orchestrator.
+   - The reviewer prompt must explicitly state that the reviewer is read-only: it must not modify code or any repository files, must not create/delete/rename files, must not apply patches, must not run formatting/fix commands, must not update ClickUp statuses, must not create/update ClickUp comments, and must report findings only back to the orchestrator.
+   - In the assigned prestarted reviewer terminal pane, use wt to switch to the worker worktree and then execute pi in that worktree with only read-only built-in tools enabled; do not use cd: herdr pane run <reviewer-pane-id> "wt -C <repo-root> switch <worker-branch> -y --execute pi -- --provider openai --model gpt-5.5 --thinking high --tools read,grep,find,ls --name \"<reviewer-slot> - ${bootstrap.taskSlug} - Reviewer\""
+   - Do not start ClickUp MCP in reviewer panes. Reviewers must not use ClickUp tools or any extension tools; if they need missing task context, they must ask the orchestrator for it in their final report instead of querying or updating ClickUp.
+   - Send the reviewer prompt after pi is ready by running: herdr pane run <reviewer-pane-id> @/tmp/clickup-harness-<reviewer-slot>-${bootstrap.taskSlug}.md
+   - After all reviewer prompts for the current batch have been sent, wait for reviewer responses deterministically in slot order with wait_agent and timeout 1800000 ms per active reviewer. Do not rely on sleeps or repeated pane reads. For each reviewer, update the UI card immediately after wait_agent returns done/blocked/timed out.
+   - Each reviewer performs only read-only code review of the assigned worker worktree based on the prompt, worker reports, and code changes. Its sole output is a report to the orchestrator with findings, evidence, severity, and recommended next steps.
+13. Collect reviewer1/reviewer2/reviewer3 results after wait_agent completes for each active reviewer, reconcile disagreements, and report consolidated review results plus recommended next steps to the user. Do not merge or remove worktrees until the user approves.
 14. After approval only, merge worker changes, update the main ClickUp task with results/tech debt/next steps, then close/cleanup herdr subagent panes through @ogulcancelik/pi-herdr and remove worktrees with wt remove -D. Never remove or close the prestarted terminal panes before the user approves cleanup.
 
 If any required command/MCP/tool is unavailable, update the UI card and ask the user for the needed fix.`;
@@ -480,7 +473,7 @@ If any required command/MCP/tool is unavailable, update the UI card and ask the 
 
 export default function (pi: ExtensionAPI) {
   pi.on("before_agent_start", async (_event: any, ctx) => {
-    if (!state.enabled || state.mcpStatus !== "running") return;
+    if (!state.enabled) return;
     const tools = enableClickUpMcpTools(pi);
     if (tools.length > 0) {
       state.cards.orchestrator.details = [
@@ -511,7 +504,7 @@ export default function (pi: ExtensionAPI) {
       state.enabled = true;
       state.primaryTaskId = taskId;
       state.cards.orchestrator.status = "starting terminal subagents";
-      state.cards.orchestrator.details = ["Will prestart workers/reviewers as terminal-only shells", "Will not start subagent pi until selected work is ready", "Will run plain /mcp in orchestrator only"];
+      state.cards.orchestrator.details = ["Will prestart workers/reviewers as terminal-only shells", "Will not start subagent pi until selected work is ready", "Will not check orchestrator ClickUp MCP status"];
       refresh(ctx);
       state.herdrStatus = await detectHerdr();
       if (state.herdrStatus !== "inside") {
@@ -524,29 +517,19 @@ export default function (pi: ExtensionAPI) {
       try {
         const herdrContext = await getCurrentHerdrContext();
         terminalBootstrap = await bootstrapTerminalAgents(ctx, taskId, herdrContext);
-        state.mcpStatus = "starting";
-        state.cards.orchestrator.status = "checking ClickUp MCP readiness";
-        state.cards.orchestrator.details = [
-          `Prestarted worker/reviewer terminal panes in ${herdrContext.workspaceId}`,
-          "Will run plain /mcp in orchestrator only",
-          "Will fail immediately if clickup is not ready",
-        ];
-        refresh(ctx);
-        const checkedContext = await checkClickUpMcpReadyBeforeTurn(herdrContext);
-        state.mcpStatus = "running";
+        state.mcpStatus = "unknown";
         const tools = enableClickUpMcpTools(pi);
         state.cards.orchestrator.status = "retrieving subtasks";
         state.cards.orchestrator.details = [
-          `Ran plain /mcp in ${checkedContext.paneId}`,
-          "Verified clickup is ready; did not run /mcp:start clickup",
-          tools.length > 0 ? `Enabled ${tools.length} mcp_clickup_* tools before orchestration` : "No mcp_clickup_* tools visible yet; will retry before agent start",
+          `Prestarted worker/reviewer terminal panes in ${herdrContext.workspaceId}`,
+          "Skipped orchestrator ClickUp MCP readiness check; did not run /mcp or /mcp:start clickup",
+          tools.length > 0 ? `Enabled ${tools.length} mcp_clickup_* tools opportunistically` : "No mcp_clickup_* tools visible yet; orchestrator should report blocked if ClickUp tools are unavailable",
         ];
         refresh(ctx);
         pi.sendUserMessage(buildKickoff(taskId, terminalBootstrap));
       } catch (error) {
-        state.mcpStatus = "error";
         const message = error instanceof Error ? error.message : String(error);
-        state.cards.orchestrator.status = message.includes("ClickUp MCP") ? "blocked: ClickUp MCP not ready" : "blocked: harness startup failed";
+        state.cards.orchestrator.status = "blocked: harness startup failed";
         state.cards.orchestrator.details = [message, "Fix the blocked startup step, then rerun /clickup-harness <task id or URL>"];
         refresh(ctx);
       }
