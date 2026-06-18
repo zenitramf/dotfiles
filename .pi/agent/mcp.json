@@ -13,6 +13,12 @@
       "url": "https://mcp.sentry.dev/mcp",
       "lifecycle": "lazy",
       "auth": "oauth"
+    },
+    "greptile": {
+      "url": "https://api.greptile.com/mcp",
+      "lifecycle": "lazy",
+      "auth": "bearer",
+      "bearerToken": "${GREPTILE_API_KEY}"
     }
   }
 }
