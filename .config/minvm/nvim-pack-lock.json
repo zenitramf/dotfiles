@@ -6,7 +6,7 @@
       "version": "'v1.10.2'"
     },
     "blink.lib": {
-      "rev": "b127d48bf8e9ac9cf41f6e0fbead317503f76558",
+      "rev": "5876dd95deeb70aadbe9f1c0b7117a135061cdac",
       "src": "https://github.com/Saghen/blink.lib"
     },
     "conform.nvim": {
@@ -26,11 +26,11 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "988416cc782dfe28bff3f0da9b8c943b236cd86a",
+      "rev": "267f5db2aa2202b9f6cc7a50783f0ccd2121766c",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
-      "rev": "25050e4ed39e628282831d4cbecb1850454ce915",
+      "rev": "2038c666bd9d8a0b7349a0b6ee00dc83104b9ecf",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
     },
     "kanagawa.nvim": {
@@ -42,7 +42,7 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim"
     },
     "mason-lspconfig.nvim": {
-      "rev": "906c32c8a034dd3d51353d63226bf91aeacd927c",
+      "rev": "21c5b3ebeaa0412e28096bb0701434c51c1fbf76",
       "src": "https://github.com/mason-org/mason-lspconfig.nvim"
     },
     "mason-tool-installer.nvim": {
@@ -54,7 +54,7 @@
       "src": "https://github.com/mason-org/mason.nvim"
     },
     "mini.nvim": {
-      "rev": "a59a9b7fb0a42cbcf022938ee5f0724320b66f63",
+      "rev": "bf8169f3e518be8de3f88073ace37d91f576cb04",
       "src": "https://github.com/echasnovski/mini.nvim"
     },
     "neoscroll.nvim": {
@@ -66,7 +66,7 @@
       "src": "https://github.com/windwp/nvim-autopairs"
     },
     "nvim-lspconfig": {
-      "rev": "ed19590a3a9792901553c388d1aadafce012f80d",
+      "rev": "fef8b117ad5fb73943913f444f22065c4b834a60",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-notify": {
@@ -91,7 +91,7 @@
       "src": "https://github.com/stevearc/oil.nvim"
     },
     "opencode.nvim": {
-      "rev": "b48c3aa94559be787c65b32c55fbc12767062f02",
+      "rev": "a08a09b4c4f69260d30d404d864dfd5aa639828c",
       "src": "https://github.com/nickjvandyke/opencode.nvim"
     },
     "pi.nvim": {
@@ -107,7 +107,7 @@
       "src": "https://github.com/stevearc/quicker.nvim"
     },
     "render-markdown.nvim": {
-      "rev": "5adf0895310c1904e5abfaad40a2baad7fe44a07",
+      "rev": "f422cb5c6855f150e2ddcfaf44e7157b98b34f6a",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "snacks.nvim": {
@@ -139,7 +139,7 @@
       "src": "https://github.com/kristijanhusak/vim-dadbod-completion"
     },
     "vim-dadbod-ui": {
-      "rev": "07e92e22114cc5b1ba4938d99897d85b58e20475",
+      "rev": "afd07819d8efcefc3317205b855ad4e3513b0011",
       "src": "https://github.com/kristijanhusak/vim-dadbod-ui"
     },
     "vim-tmux-navigator": {

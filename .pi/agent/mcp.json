@@ -19,6 +19,11 @@
       "lifecycle": "lazy",
       "auth": "bearer",
       "bearerToken": "${GREPTILE_API_KEY}"
+    },
+    "obsidian": {
+      "url": "https://xps-dad:27124/mcp/",
+      "auth": "bearer",
+      "bearerToken": "${OBSIDIAN_API_KEY}"
     }
   }
 }

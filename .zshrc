@@ -135,6 +135,28 @@ alias k=kubectl
 # ---- K9s Configuration ----
 export K9S_SKIN=kanagawa
 
+tv_zoxide_widget() {
+  BUFFER='tv zoxide'
+  zle accept-line
+}
+
+gcm() {
+   if ! git diff --cached --quiet; then
+     local msg
+     msg="$(pi -p --provider openai --model gpt-5.4-mini --thinking off "generate a concise conventional commit message for the staged
+changes")" || return 1
+     git commit -m "$msg" && git log -1 --oneline
+   else
+     echo "No staged changes; commit cancelled."
+     return 1
+   fi
+ }
+
+
+zle -N tv_zoxide_widget
+bindkey '^T' tv_zoxide_widget
+
+alias tvz='tv zoxide'
 
 # Vite+ bin (https://viteplus.dev)
 . "$HOME/.vite-plus/env"

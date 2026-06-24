@@ -19,7 +19,6 @@ local servers = {
 	"tailwindcss",
 	"jsonls",
 	"prismals",
-	"copilot",
 	"jqls",
 	"gopls",
 	"astro",
