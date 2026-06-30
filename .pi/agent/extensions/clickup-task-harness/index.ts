@@ -11,7 +11,7 @@ type TmuxStatus = "unknown" | "inside" | "outside" | "error";
 
 type AgentCard = { name: string; status: string; model: string; details: string[]; taskId?: string; tokens?: number; cost?: number };
 type HarnessState = { enabled: boolean; primaryTaskId?: string; mcpStatus: "unknown" | "starting" | "running" | "error"; tmuxStatus: TmuxStatus; mcpToolsEnabled: string[]; cards: Record<AgentKind, AgentCard> };
-type TmuxContext = { session: string; orchestratorPaneId: string; orchestratorWindowId: string; repoRoot: string };
+type TmuxContext = { session: string; orchestratorPaneId: string; orchestratorWindowId: string; repoRoot: string; orchestratorBranchName: string };
 type TerminalAgentInfo = { kind: Exclude<AgentKind, "orchestrator">; name: string; paneId: string; windowId: string; windowName: string; cwd?: string; command?: string; reused: boolean };
 type TerminalBootstrap = TmuxContext & { taskSlug: string; agents: Record<Exclude<AgentKind, "orchestrator">, TerminalAgentInfo> };
 type AgentConfig = { name: string; description: string; tools?: string; model: string; thinking: string; prompt: string };
@@ -72,10 +72,12 @@ function refresh(ctx: ExtensionContext) { if (!ctx.hasUI) return; ctx.ui.setWidg
 function isClickUpMcpTool(name: string) { return name.startsWith("mcp_clickup_"); }
 function enableClickUpMcpTools(pi: ExtensionAPI) { const tools = pi.getAllTools().map((tool) => tool.name).filter(isClickUpMcpTool); if (!tools.length) return []; const activeTools = new Set(pi.getActiveTools()); for (const tool of tools) activeTools.add(tool); pi.setActiveTools([...activeTools]); state.mcpToolsEnabled = tools; return tools; }
 function execTmux(args: string[], timeoutMs = 10000): Promise<string> { return new Promise((resolve, reject) => execFile("tmux", args, { timeout: timeoutMs }, (error, stdout, stderr) => error ? reject(new Error(`${error.message}${stderr ? `\n${stderr}` : ""}${stdout ? `\n${stdout}` : ""}`)) : resolve(stdout.trim()))); }
+function execGit(args: string[], timeoutMs = 10000): Promise<string> { return new Promise((resolve, reject) => execFile("git", args, { timeout: timeoutMs }, (error, stdout, stderr) => error ? reject(new Error(`${error.message}${stderr ? `\n${stderr}` : ""}${stdout ? `\n${stdout}` : ""}`)) : resolve(stdout.trim()))); }
 async function detectTmux(): Promise<TmuxStatus> { if (!process.env.TMUX) return "outside"; try { await execTmux(["display-message", "-p", "#{session_name}"], 3000); return "inside"; } catch { return "error"; } }
 function slugify(input: string) { const slug = input.toLowerCase().replace(/[^a-z0-9._-]+/g, "-").replace(/^-+|-+$/g, ""); return (slug || "task").slice(0, 80); }
 function terminalAgentName(kind: Exclude<AgentKind, "orchestrator">, taskSlug: string) { const role = kind.startsWith("worker") ? "Worker" : "Reviewer"; return `${kind} - ${taskSlug} - ${role}`; }
-async function getCurrentTmuxContext(): Promise<TmuxContext> { const out = await execTmux(["display-message", "-p", "#{session_name}\t#{pane_id}\t#{window_id}\t#{pane_current_path}"]); const [session, orchestratorPaneId, orchestratorWindowId, repoRoot] = out.split("\t"); if (!session || !orchestratorPaneId || !orchestratorWindowId || !repoRoot) throw new Error("Could not determine current tmux session/window/pane/repo root"); await execTmux(["rename-window", "-t", orchestratorWindowId, "cu-orchestrator"]); return { session, orchestratorPaneId, orchestratorWindowId, repoRoot }; }
+async function getCurrentTmuxContext(): Promise<TmuxContext> { const out = await execTmux(["display-message", "-p", "#{session_name}\t#{pane_id}\t#{window_id}\t#{pane_current_path}"]); const [session, orchestratorPaneId, orchestratorWindowId, repoRoot] = out.split("\t"); if (!session || !orchestratorPaneId || !orchestratorWindowId || !repoRoot) throw new Error("Could not determine current tmux session/window/pane/repo root"); const orchestratorBranchName = await getCurrentGitBranch(repoRoot); await execTmux(["rename-window", "-t", orchestratorWindowId, "cu-orchestrator"]); return { session, orchestratorPaneId, orchestratorWindowId, repoRoot, orchestratorBranchName }; }
+async function getCurrentGitBranch(repoRoot: string): Promise<string> { const branch = await execGit(["-C", repoRoot, "branch", "--show-current"], 5000); if (branch) return branch; const ref = await execGit(["-C", repoRoot, "rev-parse", "--abbrev-ref", "HEAD"], 5000); if (ref && ref !== "HEAD") return ref; throw new Error("Could not determine orchestrator branch name; cleanup requires `wt switch <orchestrator branch name>` in every team pane before `wt remove -D`"); }
 async function findWindow(session: string, name: string): Promise<string | undefined> { const out = await execTmux(["list-windows", "-t", session, "-F", "#{window_name}\t#{window_id}"]); return out.split(/\r?\n/).map((l) => l.split("\t")).find(([n]) => n === name)?.[1]; }
 async function ensureTeamWindow(session: string, repoRoot: string, name: string): Promise<{ windowId: string; reused: boolean }> { const existing = await findWindow(session, name); if (existing) return { windowId: existing, reused: true }; const out = await execTmux(["new-window", "-d", "-P", "-F", "#{window_id}", "-t", session, "-n", name, "-c", repoRoot]); return { windowId: out.trim(), reused: false }; }
 async function listPanes(windowId: string): Promise<TmuxPane[]> { const out = await execTmux(["list-panes", "-t", windowId, "-F", "#{pane_index}\t#{pane_id}\t#{pane_current_path}\t#{pane_current_command}"]); return out ? out.split(/\r?\n/).map((l) => { const [index, paneId, cwd, command] = l.split("\t"); return { index: Number(index), paneId, cwd, command }; }).sort((a, b) => a.index - b.index) : []; }
@@ -125,6 +127,7 @@ The extension has already prepared tmux windows and pane pairs. The current orch
 Tmux roster:
 - Session: ${bootstrap.session}
 - Repo root: ${bootstrap.repoRoot}
+- Orchestrator branch name: ${bootstrap.orchestratorBranchName}
 - Orchestrator pane/window: ${bootstrap.orchestratorPaneId} / ${bootstrap.orchestratorWindowId} (window name cu-orchestrator)
 ${formatTerminalRoster(bootstrap)}
 
@@ -168,10 +171,11 @@ Critical startup invariant: until the user selects work and you are ready to exe
 16. After approval only, merge worker changes and update/comment the main ClickUp task with consolidated results/tech debt/next steps.
 17. Mandatory cleanup order before any \`wt remove -D\`:
    - Ensure every worker/reviewer tmux pane started by the harness has exited from Pi back to a normal shell. Do not remove a worktree while any team pane is still running Pi in that worktree.
-   - From the orchestrator pane, run \`wt switch\` to return to the orchestrator's original worktree branch.
-   - Only after both checks succeed, remove worker worktrees with \`wt remove -D <worktree-or-branch>\`.
-   - If a pane cannot exit Pi or \`wt switch\` fails, stop cleanup, update the UI card as blocked, and ask the user how to proceed.
-18. Clean up tmux panes/windows if requested only after the Pi-exit and orchestrator-\`wt switch\` checks above are complete.
+   - In each individual team pane that used a worker worktree (worker and reviewer panes, one pane at a time), run exactly \`wt switch ${bootstrap.orchestratorBranchName}\` and verify it succeeds before continuing. This per-pane switch is required before any \`wt remove -D\`; do not rely on a single orchestrator-pane switch.
+   - From the orchestrator pane, also run exactly \`wt switch ${bootstrap.orchestratorBranchName}\` and verify it succeeds.
+   - Only after every team pane and the orchestrator pane have successfully switched to \`${bootstrap.orchestratorBranchName}\`, remove worker worktrees with \`wt remove -D <worktree-or-branch>\`.
+   - If any pane cannot exit Pi or any \`wt switch ${bootstrap.orchestratorBranchName}\` fails, stop cleanup, update the UI card as blocked, and ask the user how to proceed.
+18. Clean up tmux panes/windows if requested only after the Pi-exit and all per-pane \`wt switch ${bootstrap.orchestratorBranchName}\` checks above are complete.
 
 If any required command/MCP/tool is unavailable, update the UI card and ask the user for the needed fix.`;
 }

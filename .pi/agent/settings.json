@@ -1,15 +1,13 @@
 {
   "lastChangelogVersion": "0.80.2",
   "defaultProvider": "openai-codex",
-  "defaultModel": "gpt-5.4",
-  "defaultThinkingLevel": "off",
+  "defaultModel": "gpt-5.5",
+  "defaultThinkingLevel": "medium",
   "theme": "dark",
   "packages": [
-    "npm:@ogulcancelik/pi-herdr",
     "npm:pi-mcp-adapter",
     "npm:pi-subagents",
     "npm:pi-intercom",
-    "npm:pi-interview",
     "npm:pi-codex-limit"
   ]
 }

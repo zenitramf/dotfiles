@@ -18,3 +18,5 @@ go/
 /.pi/pi-acp
 /.pi/agent/mcp-cache.json
 /.pi/agent/mcp-oauth
+/.pi/agent/run-history.jsonl
+/.pi/agent/run-history.jsonl

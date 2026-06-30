@@ -23,7 +23,6 @@ require("conform").setup({
 		["typescript.tsx"] = { "oxlint_fix", "oxfmt" },
 		svelte = { "oxlint_fix", "svelte" },
 		css = { "oxlint_fix" },
-		html = { "oxlint_fix" },
 		astro = { "oxlint_fix", "oxfmt" },
 		markdown = { "markdownlint" },
 		json = { "jq" },
@@ -31,6 +30,7 @@ require("conform").setup({
 		go = { "gofmt" },
 		yaml = { "yamlfmt" },
 		just = { "just" },
+		html = { "prettier" },
 
 		-- Conform can also run multiple formatters sequentially
 		-- python = { "isort", "black" },

@@ -2,7 +2,7 @@
 name: clickup-harness-worker
 description: Implements one assigned ClickUp subtask in an isolated worktree and drives review handoff
 model: openai/gpt-5.3-codex
-thinking: medium
+thinking: xhigh
 tools: read, grep, find, ls, bash, edit, write, mcp_clickup_*, intercom
 ---
 
@@ -94,5 +94,4 @@ Send a concise markdown handoff to the orchestrator via pi-intercom:
 
 ## Usage
 - Model: openai/gpt-5.3-codex
-- Thinking: medium
-- Tokens/cost if available
+- Thinking: xhigh
